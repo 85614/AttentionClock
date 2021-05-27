@@ -12,12 +12,12 @@ Page({
     exitTime: '1', // 离开的时间限制（分钟）
     totalExitTime: 0, // 在本次专注中离开的总时间
     exitTimeStr: '', // 离开时间示数
-    exit: false, // 是否离开
+    exit: false, // 是否出于离开状态
     exitTimer: null, // 限制时间计时器
 
     rate: '',
-    clockShow: false,
-    mTime: 0,  // 已经走过的时间
+    clockShow: false, // ⏲页面是否显示
+    mTime: 0,  // 任务已经走过的时间
     timer: null, // 把计时器暴露出来，供其他函数调用
     timeStr: '05:00', // 计时器示数
 
@@ -34,15 +34,33 @@ Page({
   //   })
   // },
   onLoad: function () {
+    console.log("onLoad")
     // 系统设备信息
     var res = wx.getSystemInfoSync()
     var rate = 750 / res.windowWidth
     this.setData({
       rate: rate,
     })
-    this.data.totalExitTime = 0 // 累计离开时间清0
+    // this.data.totalExitTime = 0 // 累计离开时间清0
   },
 
+  onHide: function () {
+    const _this = this
+    console.log("onHide")
+    if (!_this.exit) {
+      this.pause()
+    }
+  },
+
+  onShow: function () {
+    console.log("onShow")
+    
+  },
+
+  OnUnload: function () {
+    console.log("OnUnload")
+  },
+ 
   getUserInfo: function (e) {
     app.globalData.userInfo = e.detail.userInfo
     // this.setData({
