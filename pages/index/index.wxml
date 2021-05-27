@@ -13,13 +13,8 @@
       </view>
 
     </scroll-view>
-    <view class="task-detail">接下来{{time}}分钟，你将专注做这件事</view>
+    <view class="task-detail">接下来的{{time}}分钟，你将专注做这件事</view>
   </view>
-
-
-
-
-
 
   <view class="start" bindtap="start">
     <text>开始专注</text>
@@ -41,7 +36,7 @@
 
     <view class="continueCancelBtn" wx:if="{{continueCancelShow}}">
       
-      <view class="progress-text">{{exitTimeStr}}</view>
+      <view class="progress-text">请于{{exitTimeStr}}内回来</view>
       <view class="continueBtn" bindtap="continue" bindtap="continue">继续</view>
       <view class="cancelBtn" bindtap="cancel">放弃</view>
     </view>
