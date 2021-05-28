@@ -28,35 +28,6 @@ Page({
         extClass: 'slideview-button'
       }
     ],
-    taskRecords: [
-      {
-        id: 0,
-        taskName: "math",
-        taskStartTime: "2021-5-17 15:32",
-        taskEndTime: "2021-5-17 15:34",
-        taskTime: 25,
-        note: "haha",
-        status: "已完成"
-      },
-      {
-        id: 0,
-        taskName: "Chinese",
-        taskStartTime: "2021-5-17 15:32",
-        taskEndTime: "2021-5-17 15:34",
-        taskTime: 25,
-        note: "haha",
-        status: "已完成"
-      },
-      {
-        id: 0,
-        taskName: "tech",
-        taskStartTime: "2021-5-17 15:32",
-        taskEndTime: "2021-5-17 15:34",
-        taskTime: 25,
-        note: "haha",
-        status: "已完成"
-      }
-    ],
 
     dialog_add_buttons: [
       {
@@ -81,6 +52,39 @@ Page({
     ],
   },
 
+  onLoad: function() {
+    this.setData({
+      taskRecords: wx.getStorageSync('taskRecords') || [
+        {
+          id: 0,
+          taskName: "math",
+          taskStartTime: "2021-5-17 15:32",
+          taskEndTime: "2021-5-17 15:34",
+          taskTime: 25,
+          note: "haha",
+          status: "已完成"
+        },
+        {
+          id: 1,
+          taskName: "Chinese",
+          taskStartTime: "2021-5-17 15:32",
+          taskEndTime: "2021-5-17 15:34",
+          taskTime: 25,
+          note: "haha",
+          status: "已完成"
+        },
+        {
+          id: 2,
+          taskName: "tech",
+          taskStartTime: "2021-5-17 15:32",
+          taskEndTime: "2021-5-17 15:34",
+          taskTime: 25,
+          note: "haha",
+          status: "已完成"
+        }
+      ]
+    })
+  },
   // 日历选择
   bindselectDate: function(e) {
     console.log(e)
@@ -115,6 +119,7 @@ Page({
     this.setData({
       dialogAddShow: false,
     })
+    wx.setStorageSync('taskRecords', this.data.taskRecords)
   },
 
   bindTimeChange:function(e) {
@@ -136,6 +141,7 @@ Page({
     })
   },
   showMoreOptions: function(e) {
+    console.log(e)
     const idx = e.currentTarget.dataset.idx
     this.setData({
       showMoreOptionsIndex: this.data.taskRecords[idx].id
@@ -143,6 +149,12 @@ Page({
   },
 
   hideMoreOptions: function() {
+    this.setData({
+      showMoreOptionsIndex: null
+    })
+  },
+
+  hideSlide: function() {
     this.setData({
       showMoreOptionsIndex: null
     })
@@ -177,7 +189,8 @@ Page({
 
   tapDialogDetailButton: function(e) {
     this.setData({
-      dialogDetaileShow: false
+      dialogDetaileShow: false,
+      showMoreOptionsIndex: null
     })
   },
 
@@ -185,6 +198,7 @@ Page({
     if(e.detail.index == 1) {
       console.log(this.data.dialogEditIndex)
       this.data.taskRecords[this.data.dialogEditIndex].taskTime = this.data.dialogEditTime
+      this.data.taskRecords[this.data.dialogEditIndex].note = this.data.dialogEditNote
       this.setData({
         taskRecords: this.data.taskRecords
       })
@@ -201,6 +215,13 @@ Page({
     const dialogEditTime = e.detail.value
     this.setData({
       dialogEditTime: dialogEditTime
+    })
+  },
+
+  dialogEditInputNote: function(e) {
+    const dialogEditNote = e.detail.value
+    this.setData({
+      dialogEditNote: dialogEditNote
     })
   }
 
