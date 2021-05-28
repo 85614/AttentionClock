@@ -1,5 +1,5 @@
 {
-  "entryPagePath": "pages/cell/cell",
+  "entryPagePath": "pages/home/home",
   "tabBar": {
     "list": [
       {
@@ -28,7 +28,6 @@
     "pages/index/index",
     "pages/timer/timer",
     "pages/home/home",
-    "pages/logs/logs"
     "pages/timelines/timelines",
     "pages/cell/cell",
     "pages/logs/logs"
