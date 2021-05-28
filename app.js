@@ -1,4 +1,4 @@
-// app.js
+git// app.js
 const themeListeners = []
 
 App({
@@ -92,7 +92,7 @@ App({
   },
 
   addRecord(record) {
-    this.globalData.push(record)
+    this.globalData.record.push(record)
   },
 
 
