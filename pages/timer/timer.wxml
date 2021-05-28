@@ -24,10 +24,13 @@
 
 <!-- 时钟界面 -->
 <view class='clock' hidden="{{!clockShow}}" >
-  <view class="progress">
+  <view class="progress" wx:if="{{!fail}}">
     <canvas canvas-id="progress-bg" class="progress-bg"></canvas>
     <canvas canvas-id="progress-active" class="progress-active"></canvas>
     <view class="progress-text">{{timeStr}}</view>
+  </view>
+  <view class="progress" wx:if="{{fail}}">
+    <view class="progress-text">离开时间超过限制！任务失败！</view>  
   </view>
   <!-- 按钮 -->
   <view class="btns">

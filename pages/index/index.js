@@ -7,10 +7,12 @@ const util = require('../../utils/util.js')
 Page({
   data: {
 
-    time: '1', // 任务需要的总时间（分钟）
+    time: '1', // 任务需要的总时间（分钟
+    taskTimeStr: '',
 
-    exitTime: '1', // 离开的时间限制（分钟）
+    exitTime: '5', // 离开的时间限制（分钟）
     totalExitTime: 0, // 在本次专注中离开的总时间
+    totExitTimeStr: '',
     exitTimeStr: '', // 离开时间示数
     exit: false, // 是否出于离开状态
     exitTimer: null, // 限制时间计时器
@@ -26,6 +28,8 @@ Page({
     continueCancelShow: false, // 继续和放弃按钮
 
     timestep: 50, // 计时精度（ms）
+
+    fail: false, // 是否任务失败
   },
   //事件处理函数
   // bindViewTap: function() {
@@ -40,6 +44,7 @@ Page({
     var rate = 750 / res.windowWidth
     this.setData({
       rate: rate,
+      taskTimeStr: parseInt(this.data.time) >= 10 ? this.data.time + ':00' : '0' + this.data.time + ':00',
     })
     // this.data.totalExitTime = 0 // 累计离开时间清0
   },
@@ -73,7 +78,7 @@ Page({
   start: function () {
     this.setData({
       clockShow: true,
-      timeStr: parseInt(this.data.time) >= 10 ? this.data.time + ':00' : '0' + this.data.time + ':00'
+      timeStr: this.data.taskTimeStr,
     })
     // this.drawBg()
     this.drawActive()
@@ -84,9 +89,10 @@ Page({
     this.data.totalExitTime = 0 // 累计离开时间清0
     this.setData({
       clockShow: false,
-      timeStr: parseInt(this.data.time) >= 10 ? this.data.time + ':00' : '0' + this.data.time + ':00',
+      timeStr: this.data.taskTimeStr,
       okShow: false,
       totalExitTime: 0,
+      fail: false,
     })
   },
 
@@ -99,17 +105,15 @@ Page({
       currentTime = currentTime - timestep //倒计时文字
 
       _this.setData({
-        mTime: _this.data.mTime + timestep //每100毫秒执行一次，每次时间加100毫秒，并绘图
+        mTime: _this.data.mTime + timestep //每timestep ms执行一次，每次时间加timestep，并绘图
       })
       var step = _this.data.mTime / (_this.data.time * 60 * 1000) * 2 * Math.PI + 1.5 * Math.PI
 
       if (step < 3.5 * Math.PI) {
         if (currentTime % 1000) {
-          var time_all = currentTime / 1000 //获得倒计时文字总秒数
-          var time_m = (parseInt(time_all / 60) >= 10) ? parseInt(time_all / 60) : ('0' + parseInt(time_all / 60)) //获得倒计时文字分钟
-          var time_s = (parseInt(time_all % 60) > 10) ? parseInt(time_all % 60) : '0' + parseInt(time_all % 60) //获得剩余倒计时秒数
+          let timeStr = _this.getFormat(currentTime)
           _this.setData({
-            timeStr: time_m + ':' + time_s
+            timeStr: timeStr
           })
         }
         //开始绘制动圆，每timestep ms绘制一次
@@ -138,7 +142,8 @@ Page({
           timeStr: '', 
           okShow: true,
           pauseShow: false,
-          continueCancelShow: false
+          continueCancelShow: false,
+          totExitTimeStr: this.getFormat(this.data.totalExitTime),
         })
         clearInterval(timer)
       }
@@ -170,7 +175,11 @@ Page({
   // 暂停按钮 
   pause: function () {
     clearInterval(this.data.timer)
-
+    this.setData({
+      pauseShow: false,
+      continueCancelShow: true,
+      exit: true,
+    })
     var _this = this
     var currentTime = parseInt(this.data.exitTime) * 60 * 1000
     var timestep = _this.data.timestep
@@ -181,15 +190,22 @@ Page({
 
       if (currentTime > 0) {
         if (currentTime % 1000) {
-          var time_all = currentTime / 1000; // 获得倒计时文字总秒数
-          var time_m = (parseInt(time_all / 60) >= 10) ? parseInt(time_all / 60) : ('0' + parseInt(time_all / 60)) // 获得倒计时文字分钟
-          var time_s = (parseInt(time_all % 60) > 10) ? parseInt(time_all % 60) : '0' + parseInt(time_all % 60); // 获得剩余倒计时秒数
+          var strTime = _this.getFormat(currentTime)
           _this.setData({
-            exitTimeStr: time_m + ':' + time_s
+            exitTimeStr: strTime
           })
         }
       } else { // 离开时间超出限制
-        // 将完成的数据记录到日志
+        
+        _this.setData({
+          exitTimeStr: '', 
+          okShow: true,
+          pauseShow: false,
+          continueCancelShow: false,
+          fail: true,
+          totExitTimeStr: this.getFormat(this.data.totalExitTime),
+        })
+        // 将失败的数据记录到日志
         var logs = wx.getStorageSync('logs') || [];
         logs.unshift({
           date: util.formatTime(new Date),
@@ -198,22 +214,14 @@ Page({
         });
         // console.log(logs); 
         wx.setStorageSync('logs', logs) // 把数据加到缓存
-        _this.setData({
-          exitTimeStr: '', 
-          okShow: true,
-          pauseShow: false,
-          continueCancelShow: false,
-        })
+
         clearInterval(exitTimer)
       }
     }, timestep);
-
-    this.setData({
-      pauseShow: false,
-      continueCancelShow: true,
+    _this.setData({
       exitTimer: timer,
-      exit: true,
     })
+
   },
   
   continue: function () {
@@ -231,9 +239,7 @@ Page({
 
   // 放弃按钮 ---与完成按钮功能相同
   cancel: function () {
-    clearInterval(this.data.timer)
-    clearInterval(this.data.exitTimer)
-    this.data.totalExitTime = 0 // 累计离开时间清0
+    console.log("back")
     this.setData({
       pauseShow: true,
       continueCancelShow: false,
@@ -242,7 +248,19 @@ Page({
       exitTimeStr: '',
       exit: false,
       okShow: false,
-      totalExitTime: 0 // 累计离开时间清0
+      totalExitTime: 0, // 累计离开时间清0
+      fail: false,
     })
+    clearInterval(this.data.timer)
+    clearInterval(this.data.exitTimer)
+    // this.data.totalExitTime = 0 // 累计离开时间清0
+
+  },
+
+  getFormat: function (currentTime) {
+    var time_all = currentTime / 1000; // 获得倒计时文字总秒数
+    var time_m = (parseInt(time_all / 60) >= 10) ? parseInt(time_all / 60) : ('0' + parseInt(time_all / 60)) // 获得倒计时文字分钟
+    var time_s = (parseInt(time_all % 60) >= 10) ? parseInt(time_all % 60) : '0' + parseInt(time_all % 60); // 获得剩余倒计时秒数
+    return time_m + ':' + time_s
   }
 })

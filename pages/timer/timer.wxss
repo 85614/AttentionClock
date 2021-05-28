@@ -67,7 +67,7 @@ page{
   width: 400rpx;
   height: 400rpx;
   /* background-color: orange; */
-  margin: 140rpx auto;
+  margin-bottom: 140rpx auto;
   position: relative;
 }
 .progress-bg,.progress-active{
