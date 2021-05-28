@@ -7,10 +7,6 @@
         "text": "待办"
       },
       {
-        "pagePath": "pages/timer/timer",
-        "text": "timer"
-      },
-      {
         "pagePath": "pages/timelines/timelines",
         "text": "时间轴"
       },
