@@ -20,7 +20,8 @@
     "pages/home/home",
     "pages/timer/timer",
     "pages/timelines/timelines",
-    "pages/dataanalysis/dataanalysis"
+    "pages/dataanalysis/dataanalysis",
+    "pages/begintimer/begintimer"
   ],
   "window": {
     "backgroundTextStyle": "light",
