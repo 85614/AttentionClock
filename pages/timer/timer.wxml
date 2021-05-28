@@ -47,10 +47,10 @@
     <view class="okBtn" bindtap="ok" wx:if="{{okShow}}" bindtap="cancel">返回</view>
 
     <view class="pauseBtn" bindtap="pause" wx:if="{{pauseShow}}" bindtap="pause">暂停</view>
-
     <view class="continueCancelBtn" wx:if="{{continueCancelShow}}">
       <view class="continueBtn" bindtap="continue">继续</view>
-      <view class="cancelBtn" bindtap="cancel">放弃</view>
+      
     </view>
+    <view class="cancelBtn" bindtap="cancel">放弃</view>
   </view>
 </view>
