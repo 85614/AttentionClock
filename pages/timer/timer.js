@@ -47,6 +47,7 @@ Page({
       rate: rate,
       taskTimeStr: parseInt(this.data.time) >= 10 ? this.data.time + ':00' : '0' + this.data.time + ':00',
     })
+    this.start()
     // this.data.totalExitTime = 0 // 累计离开时间清0
   },
 
@@ -63,8 +64,22 @@ Page({
     
   },
 
-  OnUnload: function () {
+  onUnload: function () {
     console.log("OnUnload")
+    this.setData({
+      pauseShow: true,
+      continueCancelShow: false,
+      clockShow: false,
+      mTime: 0, // 白圈走的路清零
+      exitTimeStr: '',
+      exit: false,
+      okShow: false,
+      totalExitTime: 0, // 累计离开时间清0
+      fail: false,
+    })
+    clearInterval(this.data.timer)
+    clearInterval(this.data.exitTimer)
+    // this.data.totalExitTime = 0 // 累计离开时间清0
   },
  
   getUserInfo: function (e) {
@@ -256,6 +271,11 @@ Page({
     clearInterval(this.data.exitTimer)
     // this.data.totalExitTime = 0 // 累计离开时间清0
 
+    
+
+    wx.switchTab({
+      url: '../home/home'
+    })
   },
 
   getFormat: function (currentTime) {

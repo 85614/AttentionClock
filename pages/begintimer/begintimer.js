@@ -57,8 +57,7 @@ Page({
 
   // 开始计时按钮 
   start: function () {
-    const id = e.currentTarget.dataset.id;
-    const task = getTasks()
+    const task = app.getTasks()
 
     wx.redirectTo({
       url: "../timer/timer?id=" + parseInt(this.data.id)
