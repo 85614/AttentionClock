@@ -38,35 +38,22 @@ CustomPage({
         text: '确定',
       }],
       // icon: base64.icon20,
-      slideButtons: [{
-        text: '普通',
-        src: global.isDemo ? '/page/weui/example/cell/icon_love.svg' : '/example/cell/icon_love.svg', // icon的路径
-      }, {
-        text: '普通',
-        extClass: 'test',
-        src: global.isDemo ? '/page/weui/example/cell/icon_star.svg' : '/example/cell/icon_star.svg', // icon的路径
-      }, {
-        type: 'warn',
-        text: '警示',
-        extClass: 'test',
-        src: global.isDemo ? '/page/weui/example/cell/icon_del.svg' : '/example/cell/icon_del.svg', // icon的路径
-      }],
       moreOptions: [{
         text: '详情',
-        src: global.isDemo ? '/page/weui/example/cell/icon_love.svg' : '/example/cell/icon_love.svg', // icon的路径
+        src: '/pages/cell/icon_love.svg', // icon的路径
         action: this.TaskDetail,
         extClass: 'slideview-button'
       }, {
         text: '编辑',
         extClass: 'test',
-        src: global.isDemo ? '/page/weui/example/cell/icon_star.svg' : '/example/cell/icon_star.svg', // icon的路径
+        src: '/pages/cell/icon_star.svg', // icon的路径
         action: this.editTask,
         extClass: 'slideview-button'
       }, {
         type: 'warn',
         text: '删除',
         extClass: 'test',
-        src: global.isDemo ? '/page/weui/example/cell/icon_del.svg' : '/example/cell/icon_del.svg', // icon的路径
+        src: '/pages/cell/icon_del.svg', // icon的路径
         action: this.deleteTask,
         extClass: 'slideview-button'
       }],
