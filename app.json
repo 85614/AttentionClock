@@ -11,6 +11,10 @@
         "text": "index"
       },
       {
+        "pagePath": "pages/timer/timer",
+        "text": "timer"
+      },
+      {
         "pagePath": "pages/logs/logs",
         "text": "logs"
       }
@@ -18,6 +22,7 @@
   },
   "pages":[
     "pages/index/index",
+    "pages/timer/timer",
     "pages/home/home",
     "pages/logs/logs"
   ],
