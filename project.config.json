@@ -42,6 +42,7 @@
   "compileType": "miniprogram",
   "libVersion": "2.16.0",
   "appid": "wxd389347f8fd83ff0",
+  "appid-zzq": "wx80606250a368fef5",
   "projectname": "AttentionClock",
   "debugOptions": {
     "hidedInDevtools": []
