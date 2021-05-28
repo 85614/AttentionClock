@@ -1,20 +1,18 @@
 <!--index.wxml-->
 <view hidden="{{clockShow}}">
-  <view class="slider">
+  <!-- <view class="slider">
     <slider min="1" max="60" show-value="true" activeColor="#e7624f"
     value="{{time}}" bindchange='slideChange'></slider>
-  </view>
+  </view> -->
 
   <view class="task">
-    <view class="task-title">选择一个任务</view>
-    <view class="task-detail">接下来{{time}}分钟，你将专注做这件事</view>
-  </view> 
+    <scroll-view scroll-y="true" style="height: 300rpx; radius: 90%;" bindscrolltoupper="upper" bindscrolltolower="lower"
+      bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+      <view wx:for="taskList">
+      </view>
 
-  <view class="task-cate">
-    <view wx:for="{{cateArr}}" class="cate-item" wx:key="cate" bindtap="clickCate" data-index="{{index}}">
-      <view class="cate-item-icon"><image src='../../images/{{item.icon}}.png'/></view>
-      <text class="cate-text {{index==cateActive ? 'cate-text-active':''}}">{{item.text}}</text>
-    </view>
+    </scroll-view>
+    <view class="task-detail">接下来的{{time}}分钟，你将专注做这件事</view>
   </view>
 
   <view class="start" bindtap="start">
@@ -23,23 +21,38 @@
 </view>
 
 <!-- 时钟界面 -->
-<view class='clock' hidden="{{!clockShow}}" >
+<view class='clock' hidden="{{!clockShow}}" style="margin-top: 40rpx">
+
+  <!-- 计时器 -->
   <view class="progress" wx:if="{{!fail}}">
     <canvas canvas-id="progress-bg" class="progress-bg"></canvas>
     <canvas canvas-id="progress-active" class="progress-active"></canvas>
     <view class="progress-text">{{timeStr}}</view>
+    <view class="progress-text2" style="width: 100%;" wx:if="{{continueCancelShow}}">请于{{exitTimeStr || "01:00"}}内回来</view>
   </view>
-  <view class="progress" wx:if="{{fail}}">
-    <view class="progress-text">离开时间超过限制！任务失败！</view>  
+
+  <!-- 失败页面 -->
+  <view class="progress1" wx:if="{{fail}}">
+      <view class="progress-text1" style="height:auto;">离开时间超过限制！</view>
+      <view class="progress-text1" style="height:auto;">任务失败！</view>
   </view>
+
+  <!-- 成功页面 -->
+  <!-- <view class="progress1" wx:if="{{okShow}}">
+      <view class="progress-text1" style="height:auto;">任务成功！</view>
+      <view class="progress-text1" style="height:auto;">成功专注时间：{{taskTimeStr}}</view>
+      <view class="progress-text1" style="height:auto;">离开时间总计：{{totExitTimeStr}}</view>
+  </view> -->
+
   <!-- 按钮 -->
-  <view class="btns">
+  <view class="btns" style="margin-top: 230rpx;">
     <view class="okBtn" bindtap="ok" wx:if="{{okShow}}" bindtap="cancel">返回</view>
+
     <view class="pauseBtn" bindtap="pause" wx:if="{{pauseShow}}" bindtap="pause">暂停</view>
-    <view class="continueCancelBtn"  wx:if="{{continueCancelShow}}">
-      <view class="continueBtn" bindtap="continue" bindtap="continue">继续</view>
+
+    <view class="continueCancelBtn" wx:if="{{continueCancelShow}}">
+      <view class="continueBtn" bindtap="continue">继续</view>
       <view class="cancelBtn" bindtap="cancel">放弃</view>
     </view>
   </view>
 </view>
-
