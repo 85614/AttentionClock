@@ -1,9 +1,9 @@
 {
-  "entryPagePath": "pages/cell/cell",
+  "entryPagePath": "pages/home/home",
   "tabBar": {
     "list": [
       {
-        "pagePath": "pages/cell/cell",
+        "pagePath": "pages/home/home",
         "text": "待办"
       },
       {
@@ -18,7 +18,7 @@
   },
   "pages":[
     "pages/index/index",
-    "pages/cell/cell",
+    "pages/home/home",
     "pages/logs/logs"
   ],
   "window":{
