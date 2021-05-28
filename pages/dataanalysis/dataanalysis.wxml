@@ -2,5 +2,19 @@
     <view class="my-page__hd">
         <view class="page__title">统计数据</view>
     </view>
-    
+    <!--index.wxml-->
+
+<view class="chart-box" style="height: 400px">
+    <my-bar></my-bar>
+</view>
+
+<view class="chart-box" style="height: 200px">
+    <my-pie></my-pie>
+</view>
+
+<view class="chart-box" style="height: 400px">
+    <my-line></my-line>
+</view>
+
+
 </view>

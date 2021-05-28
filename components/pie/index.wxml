@@ -1,0 +1,4 @@
+<!--index.wxml-->
+<view class="full-screen-container">
+  <ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ ec }}"></ec-canvas>
+</view>
