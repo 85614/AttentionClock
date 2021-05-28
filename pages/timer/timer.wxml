@@ -8,8 +8,6 @@
   <view class="task">
     <scroll-view scroll-y="true" style="height: 300rpx; radius: 90%;" bindscrolltoupper="upper" bindscrolltolower="lower"
       bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
-      <view wx:for="taskList">
-      </view>
 
     </scroll-view>
     <view class="task-detail">接下来的{{time}}分钟，你将专注做这件事</view>
