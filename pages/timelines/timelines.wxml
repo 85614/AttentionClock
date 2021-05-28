@@ -1,0 +1,124 @@
+<!--pages/timelines/timelines.wxml-->
+<view class="header">
+  <calendar 
+    cur-year="{{curYear}}"
+    cur-month="{{curMonth}}" 
+    day="{{day}}" 
+    header_show='{{header_show}}' 
+    prev='{{prev}}' 
+    next='{{next}}'
+    active_type="{{circle}}"
+    appear="{{true}}"
+    closelaststyle="{{false}}"
+    active-colort='active-colort'
+    active-coloro='active-coloro'
+    bindselectDate='bindselectDate'/>
+</view>
+
+<view class="neck">
+  <text class="add_text">补充记录</text>
+  <mp-icon class="add_icon" icon="add" size="{{25}}" bindtap="addRecords"></mp-icon>
+</view>
+
+<view class="body" >
+  <view class="body_full" wx:if="{{hasData}}">
+    <mp-cells >
+      <mp-slideview 
+        wx:for="{{taskRecords}}" 
+        wx:key="id"
+        show="{{showMoreOptionsIndex==item.id}}" 
+        buttons="{{moreOptions}}" 
+        bindshow="showMoreOptions"
+        bindhide="hideMoreOptions"
+        bindbuttontap="tapSlideViewButtons"
+        data-idx="{{index}}">
+        <mp-cell ext-class="my-cell">
+          <view style="display: flex; flex-direction: column;">
+            <text>{{item.taskName}}</text>
+            <text>{{item.note}}</text>
+            <text>{{item.taskTime}}</text>
+          </view>
+          <view slot="footer">{{item.status}}</view>
+        </mp-cell>
+      </mp-slideview>
+    </mp-cells>
+  </view>
+  <view class="body_empty" wx:else >
+    <text >暂无数据</text>
+  </view>
+</view>
+
+<mp-dialog 
+  title="补记专注记录" 
+  show="{{dialogAddShow}}"
+  buttons="{{dialog_add_buttons}}"
+  bindbuttontap="tapDialogAddButton">
+  <form style="display: flex;  flex-direction: column; justify-content: flex-start;">
+    <view style="display: flex;  flex-direction: row; justify-content:flex-start;align-items: center;">
+      <text>设置开始时间</text>
+      <picker mode="time" value="{{time}}" bindchange="bindTimeChange">
+        <view class="picker"  style="width: 115px;">
+          {{newStartTime}}
+        </view>
+      </picker>
+    </view> 
+    <view style="display: flex;  flex-direction: row; justify-content:flex-start;align-items: center;">
+      <text>设置专注时长</text>
+      <view>
+        <input type="number"  style="width: 115px;" value="{{newTime}}" bindinput="bindNewTime"></input>
+      </view>
+    </view>
+    <view style="display: flex;  flex-direction: row; justify-content: flex-start;align-items: center;">
+      <text>设置待办事项</text>
+      <picker mode="selector" value="{{taskArryindex}}" range="{{taskArry}}" bindchange="bindTaskChange">
+        <view style="width: 115px;">
+          {{taskArry[taskArryindex]}}
+        </view>
+      </picker>
+    </view>
+  </form>
+</mp-dialog>
+
+<mp-dialog
+  title="{{dialogDetaileTitle}}"
+  show="{{dialogDetaileShow}}"
+  buttons="{{dialog_detail_buttons}}"
+  bindtap="hideMoreOptions"
+  bindbuttontap="tapDialogDetailButton"
+  style="display: flex;  flex-direction: column; justify-content: flex-start;">
+  <view style="display: flex;  flex-direction: row; justify-content: space-between;">
+    <text>开始时间</text>
+    <text>{{dialogDetailStartTime}}</text>
+  </view>
+  <view style="display: flex;  flex-direction: row; justify-content: space-between;">
+    <text>结束时间</text>
+    <text>{{dialogDetailEndTime}}</text>
+  </view>
+  <view style="display: flex;  flex-direction: row; justify-content: space-between;">
+    <text>专注时长</text>
+    <text>{{dialogDetailTime}}</text>
+  </view>
+  <view style="display: flex;  flex-direction: row; justify-content: space-between;">
+    <text>计时状态</text>
+    <text>{{dialogDetailStatus}}</text>
+  </view>
+  <view>{{dialogDetailNote}}</view>
+</mp-dialog>
+
+<mp-dialog
+  title="{{dialogEditTitle}}"
+  show="{{dialogEditShow}}"
+  buttons="{{dialog_edit_buttons}}"
+  bindtap="hideMoreOptions"
+  bindbuttontap="tapDialogEditButton">
+  <form style="display: flex;  flex-direction: column; justify-content: flex-start;">
+    <input type="number"
+      placeholder="编辑专注时长，只可以比原来的短"
+      value="{{dialogEditTime}}"
+      bindinput="dialogEditInput"/>
+    <input type="text"
+      placeholder="输入本次专注的心得体会"
+      value="{{dialogEditNote}}"
+      bindinput="dialogEditInputNote"/>
+  </form>
+</mp-dialog>
