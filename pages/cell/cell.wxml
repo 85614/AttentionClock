@@ -1,0 +1,17 @@
+<view class="page" data-weui-theme="{{theme}}" bindtap="closeSlide">
+    <view class="page__bd">
+        <mp-cells style="margin: 10px 0" ext-class="my-cells" title="">
+            <mp-slideview wx:for="{{tasks}}" wx:key="id" show="{{showDetailIndex==item.id}}" buttons="{{moreOptions}}" bindshow="showDetail" bindbuttontap="slideButtonTap"  data-idx="{{index}}">
+                <mp-cell ext-class="my-cell">
+                    <view slot="icon"  style="font-size: 1em">
+                        <view style="padding-bottom: 5px">{{item.name}}</view>
+                        <view>{{item.minutes}} 分钟</view>
+                    </view>
+                    <view slot="footer"  style="font-size: 1.3em" bindtap="startTask" data-id="{{item.id}}">
+                        开始
+                    </view>
+                </mp-cell>
+            </mp-slideview>
+        </mp-cells>
+    </view>
+</view>

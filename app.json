@@ -1,6 +1,24 @@
 {
+  "entryPagePath": "pages/cell/cell",
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/cell/cell",
+        "text": "待办"
+      },
+      {
+        "pagePath": "pages/index/index",
+        "text": "index"
+      },
+      {
+        "pagePath": "pages/logs/logs",
+        "text": "logs"
+      }
+    ]
+  },
   "pages":[
     "pages/index/index",
+    "pages/cell/cell",
     "pages/logs/logs"
   ],
   "window":{
@@ -10,5 +28,8 @@
     "navigationBarTextStyle":"black"
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "useExtendedLib": {
+    "weui": true
+  }
 }
