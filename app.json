@@ -1,5 +1,5 @@
 {
-  "entryPagePath": "pages/home/home",
+  "entryPagePath": "pages/dataanalysis/dataanalysis",
   "tabBar": {
     "list": [
       {
@@ -11,7 +11,7 @@
         "text": "时间轴"
       },
       {
-        "pagePath": "pages/data-analysis/data-analysis",
+        "pagePath": "pages/dataanalysis/dataanalysis",
         "text": "数据中心"
       }
     ]
@@ -20,7 +20,7 @@
     "pages/home/home",
     "pages/timer/timer",
     "pages/timelines/timelines",
-    "pages/data-analysis/data-analysis"
+    "pages/dataanalysis/dataanalysis"
   ],
   "window": {
     "backgroundTextStyle": "light",

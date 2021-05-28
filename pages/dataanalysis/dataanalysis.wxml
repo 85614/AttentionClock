@@ -1,0 +1,6 @@
+<view class="page" data-weui-theme="{{theme}}">
+    <view class="my-page__hd">
+        <view class="page__title">统计数据</view>
+    </view>
+    
+</view>
