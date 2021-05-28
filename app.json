@@ -1,6 +1,24 @@
 {
+  "entryPagePath": "pages/home/home",
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "待办"
+      },
+      {
+        "pagePath": "pages/index/index",
+        "text": "index"
+      },
+      {
+        "pagePath": "pages/logs/logs",
+        "text": "logs"
+      }
+    ]
+  },
   "pages":[
     "pages/index/index",
+    "pages/home/home",
     "pages/logs/logs"
   ],
   "window":{
@@ -10,5 +28,8 @@
     "navigationBarTextStyle":"black"
   },
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "useExtendedLib": {
+    "weui": true
+  }
 }
