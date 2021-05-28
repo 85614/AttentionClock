@@ -150,8 +150,9 @@ CustomPage({
   startTask(e) {
     // 点击开始按钮开始待办
     console.log("start task id: " + e.currentTarget.dataset.id)
-    wx.redirectTo({
-      url: "../timer/timer" 
+    const id = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: "../timer/timer?id=" + parseInt(id)
     })
   },
   tapDialogButton(e, o) {

@@ -37,8 +37,9 @@ Page({
   //     url: '../logs/logs'
   //   })
   // },
-  onLoad: function () {
+  onLoad: function (option) {
     console.log("onLoad")
+    console.log("optiin:", option)
     // 系统设备信息
     var res = wx.getSystemInfoSync()
     var rate = 750 / res.windowWidth
