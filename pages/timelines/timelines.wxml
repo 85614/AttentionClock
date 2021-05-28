@@ -21,12 +21,12 @@
 </view>
 
 <view class="body" >
-  <view class="body_full" wx:if="{{hasData}}">
+  <view class="body_full" wx:if="{{hasData}}" bindtap="hideSlide">
     <mp-cells >
       <mp-slideview 
         wx:for="{{taskRecords}}" 
         wx:key="id"
-        show="{{showMoreOptionsIndex==item.id}}" 
+        show="{{showMoreOptionsIndex===item.id}}" 
         buttons="{{moreOptions}}" 
         bindshow="showMoreOptions"
         bindhide="hideMoreOptions"
