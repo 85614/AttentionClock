@@ -1,4 +1,9 @@
 <view class="page" data-weui-theme="{{theme}}" bindtap="closeSlide">
+    <view class="my-page__hd">
+        <view class="page__title">待办 
+            <mp-icon style="float: right;" icon="add" color="colorLight" size="25" bindtap="openAddTaskDialog"> </mp-icon>
+        </view>
+    </view>
     <view class="page__bd">
         <mp-cells style="margin: 10px 0" ext-class="my-cells" title="">
             <mp-slideview wx:for="{{tasks}}" wx:key="id" show="{{showDetailIndex==item.id}}" buttons="{{moreOptions}}" bindshow="showDetail" bindbuttontap="slideButtonTap"  data-idx="{{index}}">
@@ -14,4 +19,10 @@
             </mp-slideview>
         </mp-cells>
     </view>
+    <mp-dialog title="添加待办" ext-class="my-dialog" show="{{dialogAgentAddShow}}" bindbuttontap="tapDialogButton" buttons="{{dialogButtons}}">
+        <form rules="{{checkTask}}">
+            <input value="{{newTaskName}}" auto-focus bindinput="inputNewTaskName" style="margin-bottom: 10px; text-align: left" placeholder="请输入待办名称"></input>
+            <input type="number" value="{{newTaskTime}}" bindinput="inputNewTaskTime" style="text-align: left" placeholder="请输入时间"></input>
+        </form>
+    </mp-dialog>
 </view>
