@@ -114,7 +114,11 @@ App({
     // 添加一条记录
     this.globalData.record.push(record)
   },
-   
+  
+  getNextRecordId(){
+    return this.globalData.record.length
+  },
+
   getDayRangeMS(ms) {
     const d0 = new Date(ms)
     console.log(d0, "当日")
@@ -184,7 +188,7 @@ App({
     const ms_end = d_end.getTime()
     let ans = []
     for (let i = 0; i < record.length; ++i) {
-      if (record[i].startTime >= ms_start && record[i].startTime < ms_end)
+      if (record[i] && record[i].startTime >= ms_start && record[i].startTime < ms_end)
         ans.push(record[i])
     }
     if (ans.length === 0) {
@@ -235,11 +239,32 @@ App({
       return fmt;
     }
   },
-    // 获取累积专注次数
-    // 获取累积专注时长/分钟
-    // 获取累积专注天数
-    // 获取累积日均时长/分钟
+    get_finished_count() {
+      // 获取累积已完成的专注次数
+      let count = 0
+      const record = this.globalData.record
+      for (let i = 0; i < record.length; ++i)
+        if (record[i] && record[i].isFinish)
+          ++count;
+      return count;
+    },
+    get_finished_total_time() {
+      // 获取累积专注时长/分钟
+      let count = 0
+      const record = this.globalData.record
+      for (let i = 0; i < record.length; ++i)
+        if (record[i] && record[i].isFinish)
+          count += record[i].durationTime / 1000 / 60
+      return count
+    },
 
+    // 获取累积专注天数，算了吧
+    // 获取累积日均时长/分钟，算了吧
+
+    get_range_record(d_start, d_end){
+      // 获取从d_start 到d_end的不同task的情况
+
+    },
     // 获取某一天的专注次数
     // 获取某一天的专注时长/分钟
 
