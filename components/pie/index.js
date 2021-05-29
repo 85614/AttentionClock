@@ -1,7 +1,7 @@
 import * as echarts from '../../ec-canvas/echarts';
 
 const app = getApp();
-
+const today = new Date()
 function initChart(canvas, width, height, dpr) {
   const chart = echarts.init(canvas, null, {
     width: width,
@@ -39,7 +39,20 @@ function initChart(canvas, width, height, dpr) {
       }]
     }]
   };
-
+  const todayRecords = app.getSomeDayRecordstatistics(today.getTime())
+  console.log("today record statistic ", todayRecords)
+  const data = []
+  for (let i = 0; i < todayRecords.length; ++i) {
+    if (todayRecords[i]) {
+      console.log("todayRecords[i]", todayRecords[i])
+      data.push({
+        name: app.getTaskById(todayRecords[i].taskID).name,
+        value: todayRecords[i].total_time
+      })
+    }
+  }
+  option.series[0].data = data
+  console.log("pie data", data)
   chart.setOption(option);
   return chart;
 }
@@ -56,9 +69,21 @@ Page({
   data: {
     ec: {
       onInit: initChart
-    }
+    },
+    change: true,
+    today: today.format("yyyy-MM-dd")
   },
 
+  test(){
+    console.log("test")
+    this.setData({
+      change: false
+    })
+    this.setData({
+      change: true
+    })
+  },
+  
   onReady() {
   }
 });
