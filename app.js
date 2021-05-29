@@ -170,6 +170,10 @@ App({
   },
 
   getOneDayAllRecordMS(ms) {
+    // 获取当天的所有记录
+    // 传入参数可以是下面这样
+    // new Date(2021, 5 - 1, 29).getTime())
+    // Date.now()
     return this.getRecordTimeRange(...this.getDayRangeMS(ms))
   },
 
@@ -250,7 +254,7 @@ App({
     // 或群某年，每年的专注时间
 
   get_formated_record(r) {
-   
+    // 获取信息是字符串的记录
     const rc = {
       id: r.recordID,
       taskId: r.taskID,
