@@ -13,7 +13,11 @@
 }
 
 
-.my-page__hd{padding:16px}
+.my-page__hd {
+  padding: 16px 16px 3px;
+  color: white;
+
+}
 
 .my-dialog { margin:0}
 
@@ -21,10 +25,21 @@ ec-canvas {
   width: 100%;
   height: 100%;
 }
+
+.box {
+  margin: 16px 16px 5px;
+  padding: 8px;
+  border-radius: 2px;
+  background: white;
+}
+.box-inner {
+  padding: 16px 16px 5px;
+}
 .chart-box{
   position: relative;
   width: 100%;
   min-height: 100px;
+  
 }
 .filling-in-container {
   position: absolute;

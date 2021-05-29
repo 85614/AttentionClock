@@ -171,6 +171,10 @@ App({
     this.printRange(...this.getYearRangeMS(Date.now()))
     this.printRange(...this.getDayRangeMS(new Date().getTime()))
     this.printRange(...this.getDayRangeMS(new Date(2021, 5 - 1, 29).getTime()))
+    console.log(this.getSomeDayRecordstatistics(Date.now()))
+    console.log(this.getSomeWeekRecordstatistics(Date.now() - oneDayMs*30))
+    console.log(this.getSomeMonthRecordstatistics(Date.now() - oneDayMs * 300))
+    console.log(this.getSomeYearRecordstatistics(Date.now() - oneDayMs * 1000))
   },
 
   getOneDayAllRecordMS(ms) {
@@ -254,23 +258,61 @@ App({
       const record = this.globalData.record
       for (let i = 0; i < record.length; ++i)
         if (record[i] && record[i].isFinish)
-          count += record[i].durationTime / 1000 / 60
+          count += parseInt(record[i].durationTime / 1000 / 60)
       return count
     },
 
     // 获取累积专注天数，算了吧
     // 获取累积日均时长/分钟，算了吧
 
-    get_range_record(d_start, d_end){
+    getRangeRecordStatistics(d_start, d_end){
       // 获取从d_start 到d_end的不同task的情况
-
+      console.log(d_start, "到", d_end, "的记录统计情况")
+      let ans = []
+      const record = this.globalData.record
+      const ms_start = d_start.getTime()
+      const ms_end = d_end.getTime()
+      for (let i = 0; i < record.length; ++i){
+        const r = record[i]
+        if (r && r.isFinish && r.startTime >= ms_start && r.startTime < ms_end) {
+          ans[r.taskID] = ans[r.taskID] || {
+            taskID: r.taskID,
+            count: 0,
+            total_time: 0
+          }
+          ans[r.taskID].count ++;
+          ans[r.taskID].total_time += parseInt(r.durationTime / 1000 / 60)
+        }
+      }
+      if (ans.length === 0) {
+        console.log("无数据，填充数据以测试")
+        this.addRecordForTest(ms_start, ms_end)
+        return this.getRangeRecordStatistics(d_start, d_end)
+      }
+      return ans
     },
     // 获取某一天的专注次数
     // 获取某一天的专注时长/分钟
 
     // 获取某天、某周、某月、不同事件的总专注时间
 
+    getSomeDayRecordstatistics(ms){
+      // 获取某天的记录统计结果
+      return this.getRangeRecordStatistics(...this.getDayRangeMS(ms))
+    },
 
+    getSomeWeekRecordstatistics(ms){
+      // 获取某天的记录统计结果
+      return this.getRangeRecordStatistics(...this.getWeekRangeMS(ms))
+    },
+    getSomeMonthRecordstatistics(ms){
+      // 获取某天的记录统计结果
+      return this.getRangeRecordStatistics(...this.getMonthRangeMS(ms))
+    },
+    getSomeYearRecordstatistics(ms){
+      // 获取某天的记录统计结果
+      return this.getRangeRecordStatistics(...this.getYearRangeMS(ms))
+    },
 
     // 获取某月工作时段分布
 
@@ -283,7 +325,6 @@ App({
     // 获取信息是字符串的记录
     const rc = {
       id: r.recordID,
-      taskId: r.taskID,
       taskName: this.globalData.tasks[r.taskID].name,
       taskStartTime: new Date(r.startTime).format("yyyy-MM-dd hh:mm"),
       taskEndTime: new Date(r.startTime + r.durationTime).format("yyyy-MM-dd hh:mm"),
@@ -293,7 +334,6 @@ App({
     console.log(this.make_record(rc))
     return Object.assign({}, r ,{
       id: r.recordID,
-      taskId: r.taskID,
       taskName: this.globalData.tasks[r.taskID].name,
       taskStartTime: new Date(r.startTime).format("yyyy-MM-dd hh:mm"),
       taskEndTime: new Date(r.startTime + r.durationTime).format("yyyy-MM-dd hh:mm"),

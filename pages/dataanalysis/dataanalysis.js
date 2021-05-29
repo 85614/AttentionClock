@@ -8,9 +8,12 @@ CustomPage({
    * 页面的初始数据
    */
   data: {
-
+    total_time: 0
   },
 
+  test() {
+    console.log("test")
+  },
   /**
    * 生命周期函数--监听页面加载
    */
@@ -29,7 +32,22 @@ CustomPage({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    console.log("data center onshow")
+    const todayRecords = app.getSomeDayRecordstatistics(Date.now())
+    let today_count = 0
+    let today_time = 0;
+    const today = new Date().format("yyyy-MM-dd")
+    for (let i = 0; i < todayRecords.length; ++i) {
+      today_count += todayRecords[i] ? todayRecords[i].count : 0
+      today_time += todayRecords[i] ? todayRecords[i].total_time : 0
+    }
+    this.setData({
+      total_time: app.get_finished_total_time(),
+      total_count: app.get_finished_count(),
+      today_count,
+      today_time,
+      today
+    })
   },
 
   /**
