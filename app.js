@@ -1,4 +1,4 @@
-git// app.js
+// app.js
 const themeListeners = []
 
 App({
@@ -62,12 +62,14 @@ App({
         startTime: 123456789,  // format time
         isFinish: 1,
         exitTime: 12345,  // ms
-        lastTime: 1234, // ms
+        durationTime: 1234, // ms
 
       }, {
 
       }
     ],
+
+    recordID: 0
   },
 
   getTasks() { // 待完善

@@ -43,6 +43,9 @@ Page({
     // 系统设备信息
     var res = wx.getSystemInfoSync()
     var rate = 750 / res.windowWidth
+
+    // this.data.time = app.getTaskById(parseInt(option.id)).minutes
+
     this.setData({
       rate: rate,
       taskTimeStr: parseInt(this.data.time) >= 10 ? this.data.time + ':00' : '0' + this.data.time + ':00',
@@ -61,11 +64,12 @@ Page({
 
   onShow: function () {
     console.log("onShow")
-    
+    wx.hideHomeButton()
   },
 
   onUnload: function () {
     console.log("OnUnload")
+    let _this = this
     this.setData({
       pauseShow: true,
       continueCancelShow: false,
@@ -77,6 +81,19 @@ Page({
       totalExitTime: 0, // 累计离开时间清0
       fail: false,
     })
+
+    // 如果失败，则存储记录
+    if (!_this.data.okShow) {
+      app.addRecord({
+        taskID: _this.data.id,
+        recordID: (app.recordID)++,
+        startTime: _this.data.startTime,  // format time
+        isFinish: 0,
+        exitTime: _this.data.totalExitTime,  // ms
+        durationTime: _this.data.mTime, // ms
+      })
+    }
+
     clearInterval(this.data.timer)
     clearInterval(this.data.exitTimer)
     // this.data.totalExitTime = 0 // 累计离开时间清0
@@ -95,6 +112,7 @@ Page({
     this.setData({
       clockShow: true,
       timeStr: this.data.taskTimeStr,
+      startTime: new Date()
     })
     // this.drawBg()
     this.drawActive()
@@ -161,6 +179,18 @@ Page({
           continueCancelShow: false,
           totExitTimeStr: this.getFormat(this.data.totalExitTime),
         })
+
+        // 存储成功记录
+        app.addRecord({
+          taskID: _this.data.id,
+          recordID: (app.recordID)++,
+          startTime: _this.data.startTime,  // format time
+          isFinish: 1,
+          exitTime: _this.data.totalExitTime,  // ms
+          durationTime: _this.data.mTime, // ms
+        })
+
+
         clearInterval(timer)
       }
     }, timestep)
@@ -256,22 +286,31 @@ Page({
   // 放弃按钮 ---与完成按钮功能相同
   cancel: function () {
     console.log("back")
-    this.setData({
-      pauseShow: true,
-      continueCancelShow: false,
-      clockShow: false,
-      mTime: 0, // 白圈走的路清零
-      exitTimeStr: '',
-      exit: false,
-      okShow: false,
-      totalExitTime: 0, // 累计离开时间清0
-      fail: false,
-    })
+    let _this = this
+    // this.setData({
+    //   pauseShow: true,
+    //   continueCancelShow: false,
+    //   clockShow: false,
+    //   mTime: 0, // 白圈走的路清零
+    //   exitTimeStr: '',
+    //   exit: false,
+    //   okShow: false,
+    //   totalExitTime: 0, // 累计离开时间清0
+    //   fail: false,
+    // })
+
+    // app.addRecord({
+    //   taskID: _this.data.id,
+    //   recordID: (app.recordID)++,
+    //   startTime: _this.data.startTime,  // format time
+    //   isFinish: 0,
+    //   exitTime: _this.data.totalExitTime,  // ms
+    //   durationTime: _this.data.mTime, // ms
+    // })
+
     clearInterval(this.data.timer)
     clearInterval(this.data.exitTimer)
     // this.data.totalExitTime = 0 // 累计离开时间清0
-
-    
 
     wx.switchTab({
       url: '../home/home'
