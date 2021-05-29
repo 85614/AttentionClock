@@ -46,7 +46,7 @@
     </view>
     
     <view class="box">
-        <view class="chart-box" style="height: 400px">
+        <view class="chart-box" style="height: 300px">
             <my-line></my-line>
         </view>
     </view>

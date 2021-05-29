@@ -1,4 +1,18 @@
 <!--index.wxml-->
-<view class="full-screen-container">
+<!-- <view class="full-screen-container">
   <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+</view> -->
+
+
+<!--index.wxml-->
+
+<view style="position: relative; height: 100%;display: flex;flex-direction: column;">
+  <view style="flex-grow: 0; font-size: 0.7em;" bindtap="test">
+    月度时间统计 {{monthStr||"1970-01-01"}}
+  </view>
+  <view style="flex-grow: 1; position: relative">
+    <view wx:if="{{!change}}" class="full-screen-container">
+      <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
+    </view>
+  </view>
 </view>

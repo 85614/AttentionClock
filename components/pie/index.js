@@ -15,7 +15,7 @@ function initChart(canvas, width, height, dpr) {
     series: [{
       label: {
         normal: {
-          fontSize: 14
+          fontSize: 7
         }
       },
       type: 'pie',
@@ -40,11 +40,11 @@ function initChart(canvas, width, height, dpr) {
     }]
   };
   const todayRecords = app.getSomeDayRecordstatistics(today.getTime())
-  console.log("today record statistic ", todayRecords)
+  // console.log("today record statistic ", todayRecords)
   const data = []
   for (let i = 0; i < todayRecords.length; ++i) {
     if (todayRecords[i]) {
-      console.log("todayRecords[i]", todayRecords[i])
+      // console.log("todayRecords[i]", todayRecords[i])
       data.push({
         name: app.getTaskById(todayRecords[i].taskID).name,
         value: todayRecords[i].total_time
@@ -52,7 +52,7 @@ function initChart(canvas, width, height, dpr) {
     }
   }
   option.series[0].data = data
-  console.log("pie data", data)
+  // console.log("pie data", data)
   chart.setOption(option);
   return chart;
 }
@@ -70,20 +70,20 @@ Page({
     ec: {
       onInit: initChart
     },
-    change: true,
-    today: today.format("yyyy-MM-dd")
+    today: today.format("yyyy年MM月dd日")
   },
 
   test(){
     console.log("test")
-    this.setData({
-      change: false
-    })
+  },
+  
+  onShow() {
+    console.log("pie onShow flush")
     this.setData({
       change: true
     })
-  },
-  
-  onReady() {
+    this.setData({
+      change: false
+    })
   }
 });

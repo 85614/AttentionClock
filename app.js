@@ -163,21 +163,22 @@ App({
   
   test(){
     const todayRecord = this.getOneDayAllRecordMS(Date.now())
-    console.log(todayRecord)
-    for (let i = 0; i < todayRecord.length; ++i)
-      console.log(this.get_formated_record(todayRecord[i]))
+    // console.log(todayRecord)
+    // for (let i = 0; i < todayRecord.length; ++i)
+    //   console.log(this.get_formated_record(todayRecord[i]))
     // 下面三种方式都可以获得从 1970/01/01 至今的毫秒数
 
-    this.printRange(...this.getDayRangeMS(Date.now()))
-    this.printRange(...this.getWeekRangeMS(Date.now()))
-    this.printRange(...this.getMonthRangeMS(Date.now()))
-    this.printRange(...this.getYearRangeMS(Date.now()))
-    this.printRange(...this.getDayRangeMS(new Date().getTime()))
-    this.printRange(...this.getDayRangeMS(new Date(2021, 5 - 1, 29).getTime()))
-    console.log(this.getSomeDayRecordstatistics(Date.now()))
-    console.log(this.getSomeWeekRecordstatistics(Date.now() - oneDayMs*30))
-    console.log(this.getSomeMonthRecordstatistics(Date.now() - oneDayMs * 300))
-    console.log(this.getSomeYearRecordstatistics(Date.now() - oneDayMs * 1000))
+    // this.printRange(...this.getDayRangeMS(Date.now()))
+    // this.printRange(...this.getWeekRangeMS(Date.now()))
+    // this.printRange(...this.getMonthRangeMS(Date.now()))
+    // this.printRange(...this.getYearRangeMS(Date.now()))
+    // this.printRange(...this.getDayRangeMS(new Date().getTime()))
+    // this.printRange(...this.getDayRangeMS(new Date(2021, 5 - 1, 29).getTime()))
+    // console.log(this.getSomeDayRecordstatistics(Date.now()))
+    // console.log(this.getSomeWeekRecordstatistics(Date.now() - oneDayMs*30))
+    // console.log(this.getSomeMonthRecordstatistics(Date.now() - oneDayMs * 300))
+    // console.log(this.getSomeYearRecordstatistics(Date.now() - oneDayMs * 1000))
+    
   },
 
   getOneDayAllRecordMS(ms) {
@@ -317,6 +318,20 @@ App({
       return this.getRangeRecordStatistics(...this.getYearRangeMS(ms))
     },
 
+    getSomeMonthDistribution(ms){
+      this.addRecordForTest(ms - oneDayMs * 30, ms)
+      const monthData = this.getRecordTimeRange(...this.getMonthRangeMS(ms))
+      let ans = []
+      for (let i = 0; i < monthData.length; ++i){
+        const x = monthData[i]
+        const d = new Date(x.startTime).getDate()
+        ans[d] = ans[d] || 0
+        ans[d] += parseInt(x.durationTime / 1000 / 60)
+      }
+      // console.log('月分布', ans)
+      return ans
+    },
+
     // 获取某月工作时段分布
 
 
@@ -326,15 +341,6 @@ App({
 
   get_formated_record(r) {
     // 获取信息是字符串的记录
-    const rc = {
-      id: r.recordID,
-      taskName: this.globalData.tasks[r.taskID].name,
-      taskStartTime: new Date(r.startTime).format("yyyy-MM-dd hh:mm"),
-      taskEndTime: new Date(r.startTime + r.durationTime).format("yyyy-MM-dd hh:mm"),
-      taskTime: parseInt(r.durationTime / 1000 / 60),
-      status: r.isFinish ? "已完成" : "中途放弃"
-    }
-    console.log(this.make_record(rc))
     return Object.assign({}, r ,{
       id: r.recordID,
       taskName: this.globalData.tasks[r.taskID].name,

@@ -14,7 +14,7 @@
 
 
 .my-page__hd {
-  padding: 16px 16px 3px;
+  padding: 5px 5px 3px;
   color: white;
 
 }
@@ -27,14 +27,12 @@ ec-canvas {
 }
 
 .box {
-  margin: 16px 16px 5px;
+  margin: 5px 5px 5px;
   padding: 8px;
   border-radius: 2px;
   background: white;
 }
-.box-inner {
-  padding: 16px 16px 5px;
-}
+
 .chart-box{
   position: relative;
   width: 100%;
