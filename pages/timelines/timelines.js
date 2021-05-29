@@ -20,7 +20,6 @@ Page({
     dialogDetaileShow: false, // 记录详情的对话框是否出现
     dialogEditShow: false, // 记录修改的对话框是否出现
     newStartTime: new Date().getHours().toString() + ":" + (new Date().getMinutes() < 10 ? "0" + new Date().getMinutes(): new Date().getMinutes()),
-    taskArry: ["math", "Chinese", "tech"], // 所有的待办事项
     taskArryindex: 0,
     moreOptions: [
       {
@@ -29,6 +28,11 @@ Page({
       },
       {
         text: "编辑",
+        extClass: 'slideview-button'
+      },
+      {
+        type: 'warn',
+        text: "删除",
         extClass: 'slideview-button'
       }
     ],
@@ -54,53 +58,47 @@ Page({
         text: "确定",
       }
     ],
+    dialog_delete_buttons: [
+      {
+        text: "取消"
+      },
+      {
+        text: "确定",
+      }
+    ],
   },
 
   onLoad: function() {
     console.log(app.getTasks())
     const todayRecord = app.getOneDayAllRecordMS(Date.now())
-    console.log(todayRecord)
-    for (let i = 0; i < todayRecord.length; ++i)
+    const taskRecords = []
+    const taskArry = []
+    for (let i = 0; i < todayRecord.length; ++i){
       console.log(app.get_formated_record(todayRecord[i]))
-
+      taskRecords.push(app.get_formated_record(todayRecord[i]))
+    }
+    for(let i = 0; i < app.getTasks().length; i++) {
+      taskArry.push(app.getTasks()[i].name)
+    }
     this.setData({
-      taskRecords: wx.getStorageSync('taskRecords') || [
-        {
-          id: 0,
-          taskName: "math",
-          taskStartTime: "2021-5-17 15:32",
-          taskEndTime: "2021-5-17 15:34",
-          taskTime: 25,
-          note: "haha",
-          status: "已完成"
-        },
-        {
-          id: 1,
-          taskName: "Chinese",
-          taskStartTime: "2021-5-17 15:32",
-          taskEndTime: "2021-5-17 15:34",
-          taskTime: 25,
-          note: "haha",
-          status: "已完成"
-        },
-        {
-          id: 2,
-          taskName: "tech",
-          taskStartTime: "2021-5-17 15:32",
-          taskEndTime: "2021-5-17 15:34",
-          taskTime: 25,
-          note: "haha",
-          status: "已完成"
-        }
-      ]
+      taskRecords: wx.getStorageSync('taskRecords') || taskRecords,
+      taskArry: wx.getStorageSync('taskArry') || taskArry,
+      newDate:  new Date().format("yyyy-MM-dd")
     })
+    wx.setStorageSync('taskArry', this.data.taskArry)
+    wx.setStorageSync('taskRecords', this.data.taskRecords)
   },
   // 日历选择
   bindselectDate: function(e) {
-    console.log(e)
     this.setData({
-      hasData: true
+      hasData: false,
+      newDate: e.detail.date
     })
+   if(app.getOneDayAllRecordMS(Date.now()) != null) {
+     this.setData({
+       hasData: true
+     })
+   }
   },
 
   // 添加记录
@@ -112,15 +110,19 @@ Page({
 
   tapDialogAddButton: function(e, o) {
     if(e.detail.index == 1) {
-      this.data.taskRecords.push({
-        id: this.data.taskRecords[this.data.taskRecords.length - 1].id + 1,
-        taskName: this.data.taskArry[this.data.taskArryindex],
-        taskStartTime: "2021-5-17 15:32",
-        taskEndTime: "2021-5-17 15:34",
-        taskTime: 25,
-        note: "左滑填写心得",
-        status: "已完成"
-      })
+      const newDate = this.data.newDate + " " + this.data.newStartTime
+      const newRecord = {
+        taskID: this.data.taskArryindex,
+        id: app.getNextRecordId(),
+        startTime: new Date(newDate).getTime(),
+        isFinish: 1,
+        exitTime: 0,
+        taskTime: parseInt(this.data.newTime)
+      }
+      const newTaskRecord = app.make_record(newRecord)
+      this.data.taskRecords.push(app.get_formated_record(newTaskRecord))
+      app.addRecord(newTaskRecord)
+      console.log(newTaskRecord)
       this.setData({
         taskRecords: this.data.taskRecords,
         hasData: true
@@ -130,6 +132,7 @@ Page({
       dialogAddShow: false,
     })
     wx.setStorageSync('taskRecords', this.data.taskRecords)
+
   },
 
   bindTimeChange:function(e) {
@@ -147,7 +150,7 @@ Page({
 
   bindTaskChange: function(e) {
     this.setData({
-      taskArryindex: e.detail.value
+      taskArryindex: parseInt(e.detail.value)
     })
   },
   showMoreOptions: function(e) {
@@ -177,7 +180,6 @@ Page({
       const dialogDetailEndTime = this.data.taskRecords[e.currentTarget.dataset.idx].taskEndTime
       const dialogDetailTime = this.data.taskRecords[e.currentTarget.dataset.idx].taskTime
       const dialogDetailStatus = this.data.taskRecords[e.currentTarget.dataset.idx].status
-      const dialogDetailNote = this.data.taskRecords[e.currentTarget.dataset.idx].note
       this.setData({
         dialogDetaileShow: true,
         dialogDetaileTitle,
@@ -185,7 +187,6 @@ Page({
         dialogDetailEndTime,
         dialogDetailTime,
         dialogDetailStatus,
-        dialogDetailNote,
       })
     } else if(e.detail.index == 1) {
       const dialogEditIndex = e.currentTarget.dataset.idx
@@ -193,6 +194,13 @@ Page({
         dialogEditShow: true,
         dialogEditTitle: "编辑记录",
         dialogEditIndex
+      })
+    } else if(e.detail.index == 2) {
+      const dialogDeleteIndex = e.currentTarget.dataset.idx
+      this.setData({
+        dialogDeleteShow: true,
+        dialogDeleteTitle: "删除记录",
+        dialogDeleteIndex
       })
     }
   },
@@ -206,9 +214,16 @@ Page({
 
   tapDialogEditButton: function(e) {
     if(e.detail.index == 1) {
-      console.log(this.data.dialogEditIndex)
       this.data.taskRecords[this.data.dialogEditIndex].taskTime = this.data.dialogEditTime
-      this.data.taskRecords[this.data.dialogEditIndex].note = this.data.dialogEditNote
+      const editRecord = {
+        taskID: this.data.taskRecords[this.data.dialogEditIndex].taskID,
+        id: this.data.taskRecords[this.data.dialogEditIndex].id,
+        startTime: this.data.taskRecords[this.data.dialogEditIndex].startTime,
+        isFinish: this.data.taskRecords[this.data.dialogEditIndex].isFinish,
+        exitTime: this.data.taskRecords[this.data.dialogEditIndex].exitTime,
+        taskTime: parseInt(this.data.taskRecords[this.data.dialogEditIndex].taskTime)
+      }
+      app.setRecord(this.data.dialogEditIndex, app.make_record(editRecord))
       this.setData({
         taskRecords: this.data.taskRecords
       })
@@ -219,6 +234,7 @@ Page({
       showMoreOptionsIndex: null,
       dialogEditTime: null
     })
+    wx.setStorageSync('taskRecords', this.data.taskRecords)
   },
 
   dialogEditInput: function(e) {
@@ -228,11 +244,24 @@ Page({
     })
   },
 
-  dialogEditInputNote: function(e) {
-    const dialogEditNote = e.detail.value
-    this.setData({
-      dialogEditNote: dialogEditNote
-    })
+  tapDialogDeleteButton: function(e) {
+    const index = this.data.dialogDeleteIndex
+    if(e.detail.index == 1) {
+      app.deleteRecord(index)
+      const todayRecord = app.getOneDayAllRecordMS(Date.now())
+      const taskRecords = []
+      for (let i = 0; i < todayRecord.length; ++i){
+        console.log(app.get_formated_record(todayRecord[i]))
+        taskRecords.push(app.get_formated_record(todayRecord[i]))
+      }
+      this.setData({
+        taskRecords: taskRecords,
+        dialogDeleteShow: false,
+        dialogDeleteIndex: null,
+        showMoreOptionsIndex: null,
+      })
+    }
+    wx.setStorageSync('taskRecords', this.data.taskRecords)
   }
 
 

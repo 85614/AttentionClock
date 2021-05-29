@@ -87,7 +87,7 @@ App({
     // 把id为id的record
     const record = this.globalData.record
     for (let i = 0; i < record.length; ++i) {
-      if (record[i].recordID== id)
+      if (record[i].recordID === id)
         return record[i]
     }
   },
@@ -96,8 +96,9 @@ App({
     // 把id为id的record
     const record = this.globalData.record
     for (let i = 0; i < record.length; ++i) {
-      if (record[i].recordID== id)
+      if (record[i].recordID == id){
         record[i] =r
+      }
     }
   },
 
@@ -105,8 +106,10 @@ App({
     // 删除record
     const record = this.globalData.record
     for (let i = 0; i < record.length; ++i) {
-      if (record[i].recordID== id)
+      if (record[i].recordID == id){
         record.splice(i, 1)
+        console.log("you have delete record", i)
+      }
     }
   },
 

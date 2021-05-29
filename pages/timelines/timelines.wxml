@@ -35,8 +35,7 @@
         <mp-cell ext-class="my-cell">
           <view style="display: flex; flex-direction: column;">
             <text>{{item.taskName}}</text>
-            <text>{{item.note}}</text>
-            <text>{{item.taskTime}}</text>
+            <text>{{item.taskTime + "分"}}</text>
           </view>
           <view slot="footer">{{item.status}}</view>
         </mp-cell>
@@ -71,7 +70,7 @@
     <view style="display: flex;  flex-direction: row; justify-content: flex-start;align-items: center;">
       <text>设置待办事项</text>
       <picker mode="selector" value="{{taskArryindex}}" range="{{taskArry}}" bindchange="bindTaskChange">
-        <view style="width: 115px;">
+        <view>
           {{taskArry[taskArryindex]}}
         </view>
       </picker>
@@ -96,13 +95,12 @@
   </view>
   <view style="display: flex;  flex-direction: row; justify-content: space-between;">
     <text>专注时长</text>
-    <text>{{dialogDetailTime}}</text>
+    <text>{{dialogDetailTime + "分"}}</text>
   </view>
   <view style="display: flex;  flex-direction: row; justify-content: space-between;">
     <text>计时状态</text>
     <text>{{dialogDetailStatus}}</text>
   </view>
-  <view>{{dialogDetailNote}}</view>
 </mp-dialog>
 
 <mp-dialog
@@ -113,12 +111,19 @@
   bindbuttontap="tapDialogEditButton">
   <form style="display: flex;  flex-direction: column; justify-content: flex-start;">
     <input type="number"
-      placeholder="编辑专注时长，只可以比原来的短"
+      placeholder="编辑你的专注时长"
       value="{{dialogEditTime}}"
       bindinput="dialogEditInput"/>
-    <input type="text"
-      placeholder="输入本次专注的心得体会"
-      value="{{dialogEditNote}}"
-      bindinput="dialogEditInputNote"/>
   </form>
+</mp-dialog>
+
+<mp-dialog
+  title="{{dialogDeleteTitle}}"
+  show="{{dialogDeleteShow}}"
+  buttons="{{dialog_delete_buttons}}"
+  bindtap="hideMoreOptions"
+  bindbuttontap="tapDialogDeleteButton">
+  <view style="display: flex;  flex-direction: column; justify-content: flex-start;">
+    是否删除本条记录
+  </view>
 </mp-dialog>
