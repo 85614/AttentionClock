@@ -1,4 +1,8 @@
 // pages/timelines/timelines.js
+
+const app = getApp()
+
+
 Page({
 
   /**
@@ -53,6 +57,12 @@ Page({
   },
 
   onLoad: function() {
+    console.log(app.getTasks())
+    const todayRecord = app.getOneDayAllRecordMS(Date.now())
+    console.log(todayRecord)
+    for (let i = 0; i < todayRecord.length; ++i)
+      console.log(app.get_formated_record(todayRecord[i]))
+
     this.setData({
       taskRecords: wx.getStorageSync('taskRecords') || [
         {

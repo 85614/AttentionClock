@@ -178,6 +178,7 @@ App({
   },
 
   getRecordTimeRange(d_start, d_end) {
+    console.log(d_start, "到", d_end, "的所有记录")
     const record = this.globalData.record
     const ms_start = d_start.getTime()
     const ms_end = d_end.getTime()
