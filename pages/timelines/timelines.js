@@ -68,7 +68,8 @@ Page({
     ],
   },
 
-  onLoad: function() {
+  onShow: function() {
+    console.log('timelines onShow')
     console.log(app.getTasks())
     const todayRecord = app.getOneDayAllRecordMS(Date.now())
     const taskRecords = []
@@ -81,12 +82,10 @@ Page({
       taskArry.push(app.getTasks()[i].name)
     }
     this.setData({
-      taskRecords: wx.getStorageSync('taskRecords') || taskRecords,
-      taskArry: wx.getStorageSync('taskArry') || taskArry,
-      newDate:  new Date().format("yyyy-MM-dd")
+      taskRecords: taskRecords,
+      taskArry: taskArry,
+      newDate: new Date().format("yyyy-MM-dd")
     })
-    wx.setStorageSync('taskArry', this.data.taskArry)
-    wx.setStorageSync('taskRecords', this.data.taskRecords)
   },
   // 日历选择
   bindselectDate: function(e) {
