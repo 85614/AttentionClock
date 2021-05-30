@@ -86,7 +86,7 @@ Page({
     if (!_this.data.okShow) {
       app.addRecord({
         taskID: _this.data.id,
-        recordID: (app.recordID)++,
+        recordID: app.getNextRecordId(),
         startTime: _this.data.startTime,  // format time
         isFinish: 0,
         exitTime: _this.data.totalExitTime,  // ms
