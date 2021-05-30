@@ -319,6 +319,7 @@ App({
     },
 
     getSomeMonthDistribution(ms){
+      // 获取一个月内每天的工作时间
       this.addRecordForTest(ms - oneDayMs * 30, ms)
       const monthData = this.getRecordTimeRange(...this.getMonthRangeMS(ms))
       let ans = []
@@ -333,6 +334,7 @@ App({
     },
     
     getSomeYearDistribution(ms){
+      // 获取一年内每个月的工作时间
       this.addRecordForTest(ms - oneDayMs * 465, ms)
       const monthData = this.getRecordTimeRange(...this.getYearRangeMS(ms))
       let ans = []
@@ -347,7 +349,32 @@ App({
     },
     // 获取某月工作时段分布
 
-
+    getSomeMonthDayDistribution(ms) {
+      // 获取一个月 一天内每个时间段的工作事件
+      return this.getDayDistribution(...this.getMonthRangeMS(ms))
+    },
+    
+    getDayDistribution(d_start, d_end) {
+      // 获取 某一时间段内的工作时间分布（在一天中每个时间段内，分别工作了多少时间）
+      this.addRecordForTest(d_start.getTime(), d_end.getTime())
+      const monthData = this.getRecordTimeRange(d_start, d_end)
+      let ans = []
+      for (let i = 0; i < monthData.length; ++i) {
+        const x = monthData[i]
+        let d = new Date(x.startTime).getHours()
+        let total_minutes = parseInt(x.durationTime / 1000 / 60)
+        while (total_minutes > 0) {
+          d = (d + 1) % 24
+          let t = total_minutes > 60 ? 60 : total_minutes
+          ans[d] = (ans[d] || 0) + t
+          total_minutes -= t
+        }
+      }
+      // console.log('月分布', ans)
+      return ans
+    },
+    
+    
     // 获取某月，每天的专注时间
 
     // 或群某年，每年的专注时间
