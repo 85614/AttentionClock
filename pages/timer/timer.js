@@ -221,13 +221,21 @@ Page({
   // 暂停按钮 
   pause: function () {
     clearInterval(this.data.timer)
-    this.setData({
-      pauseShow: false,
-      continueCancelShow: true,
-      exit: true,
-    })
+    if (!this.data.setGiveUp) {
+      this.setData({
+        pauseShow: false,
+        continueCancelShow: true,
+        exit: true,
+      })
+    }
+    else {
+      this.data.pauseShow = false
+      this.data.continueCancelShow = true
+      this.data.exit = true
+    }
     var _this = this
-    var currentTime = parseInt(this.data.exitTime) * 60 * 1000
+    var currentTime = parseInt(this.data.setGiveUp ? 0 : this.data.exitTime) * 60 * 1000
+    this.data.setGiveUp = false
     var timestep = _this.data.timestep
     var timer = setInterval(() => {
       currentTime = currentTime - timestep // 倒计时文字
@@ -269,6 +277,11 @@ Page({
 
   },
   
+  giveUp: function() {
+    this.data.setGiveUp = true
+    this.pause()
+  },
+
   continue: function () {
     clearInterval(this.data.exitTimer)
     clearInterval(this.data.timer)

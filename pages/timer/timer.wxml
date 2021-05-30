@@ -32,6 +32,6 @@
       <view class="continueBtn" bindtap="continue">继续</view>
       
     </view>
-    <view class="cancelBtn" wx:if="{{!okShow}}"bindtap="cancel">放弃</view>
+    <view class="cancelBtn" wx:if="{{!okShow}}"bindtap="giveUp">放弃</view>
   </view>
 </view>
