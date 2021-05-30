@@ -2,6 +2,8 @@ import * as echarts from '../../ec-canvas/echarts';
 
 const app = getApp();
 const today = new Date()
+let _chart
+
 function initChart(canvas, width, height, dpr) {
   const chart = echarts.init(canvas, null, {
     width: width,
@@ -10,7 +12,9 @@ function initChart(canvas, width, height, dpr) {
   });
   canvas.setChart(chart);
 
-  var option = {
+  _chart = chart
+
+  let option = {
     backgroundColor: "#ffffff",
     series: [{
       label: {
@@ -21,22 +25,7 @@ function initChart(canvas, width, height, dpr) {
       type: 'pie',
       center: ['50%', '50%'],
       radius: ['20%', '40%'],
-      data: [{
-        value: 55,
-        name: '北京'
-      }, {
-        value: 20,
-        name: '武汉'
-      }, {
-        value: 10,
-        name: '杭州'
-      }, {
-        value: 20,
-        name: '广州'
-      }, {
-        value: 38,
-        name: '上海'
-      }]
+      data: []
     }]
   };
   const todayRecords = app.getSomeDayRecordstatistics(today.getTime())
@@ -71,17 +60,113 @@ Page({
       onInit: initChart
     },
     change: true,
-    today: today.format("yyyy-MM-dd")
+    today: today.format("yyyy-MM-dd"),
+    curDate: today,
+    curState: 0, // 0: 日， 1：周， 2：月，3：年
   },
 
-  test(){
-    console.log("test")
-    this.setData({
-      change: false
-    })
-    this.setData({
-      change: true
-    })
+  // 向前进一个时间段
+  forward() {
+    let cur = this.data.curDate
+    if (curState === 0) { // 日
+      this.data.curDate.setDate(cur.getDate() + 1)
+    }
+    else if (curState === 1) { // 周
+      this.data.curDate.setDate(cur.getDate() + 7 - cur.getDay());
+    }
+    else if (curState === 2) { // 月
+      this.data.curDate = new Date(cur.getFullYear(), cur.getMonth() + 1, 1)
+    }
+    else {  // 年
+      this.data.curDate = new Date(cur.getFullYear() + 1, 1, 1)
+    }
+    this.resetData()
+  },
+
+  // 向后退一个时间段
+  back() {
+    let cur = this.data.curDate
+    if (curState === 0) { // 日
+      this.data.curDate.setDate(cur.getDate() - 1)
+    }
+    else if (curState === 1) { // 周
+      this.data.curDate.setDate(cur.getDate() - 7 - cur.getDay());
+    }
+    else if (curState === 2) { // 月
+      this.data.curDate.setDate(cur.getFullYear(), cur.getMonth() - 1, 1)
+    }
+    else {  // 年
+      this.data.curDate.setDate(cur.getFullYear() - 1, 1, 1)
+    }
+    this.resetData()
+  },
+
+  // 转换状态
+  stateTransition(nxt) {
+    this.data.curState = nxt
+    if (nxt === 1) { // 周
+      this.data.curDate.setDate(cur.getDate() - cur.getDay());
+    }
+    else if (nxt === 2) { // 月
+      this.data.curDate.setDate(cur.getFullYear(), cur.getMonth(), 1)
+    }
+    else {  // 年
+      this.data.curDate.setDate(cur.getFullYear(), 1, 1)
+    }
+    resetData()
+  },
+
+  // 根据新的状态重置数据
+  resetData(){
+    let option = {
+      backgroundColor: "#ffffff",
+      series: [{
+        label: {
+          normal: {
+            fontSize: 14
+          }
+        },
+        type: 'pie',
+        center: ['50%', '50%'],
+        radius: ['20%', '40%'],
+        data: []
+      }]
+    };
+
+    let records    
+    if (this.curState === 0) { // 日
+      records = app.getSomeDayRecordstatistics(curDate.getTime())
+      console.log("getting day records ", records)
+    }
+    else if (this.curState === 1) { // 周
+      records = app.getSomeWeekRecordstatistics(curDate.getTime())
+      console.log("getting week records ", records)
+    }
+    else if (this.curState === 2) { // 月
+      records = app.getSomeMonthRecordstatistics(curDate.getTime())
+      console.log("getting month records ", records)
+    }
+    else { // 年
+      records = app.getSomeYearRecordstatistics(curDate.getTime())
+      console.log("getting year records ", records)
+    }
+
+    const data = []
+    for (let i = 0; i < records.length; ++i) {
+      if (records[i]) {
+        console.log("records[i]", records[i])
+        data.push({
+          name: app.getTaskById(records[i].taskID).name,
+          value: records[i].total_time
+        })
+      }
+    }
+
+    _chart.setOption(option)
+  },
+
+  test() {
+    
   },
   
   onReady() {

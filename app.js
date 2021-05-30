@@ -87,7 +87,7 @@ App({
     // 把id为id的record
     const record = this.globalData.record
     for (let i = 0; i < record.length; ++i) {
-      if (record[i].recordID== id)
+      if (record[i].recordID == id)
         return record[i]
     }
   },
