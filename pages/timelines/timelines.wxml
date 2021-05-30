@@ -31,7 +31,8 @@
         bindshow="showMoreOptions"
         bindhide="hideMoreOptions"
         bindbuttontap="tapSlideViewButtons"
-        data-idx="{{index}}">
+        data-idx="{{index}}"
+        data-recordID="{{item.recordID}}">
         <mp-cell ext-class="my-cell">
           <view style="display: flex; flex-direction: column;">
             <text>{{item.taskName}}</text>

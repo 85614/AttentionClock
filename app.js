@@ -216,7 +216,7 @@ App({
         for(let i = 0; i < count; i++) {
           this.addRecord({
             taskID: i % this.globalData.tasks.length,
-            recordID: i,
+            recordID: this.globalData.record.length,
             startTime: date.getTime(),
             isFinish: i == 0 ? 0 : 1,
             exitTime: i,  // ms

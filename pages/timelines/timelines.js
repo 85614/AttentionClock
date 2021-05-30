@@ -92,13 +92,21 @@ Page({
   bindselectDate: function(e) {
     this.setData({
       hasData: false,
-      newDate: e.detail.date
+      newDate: e.detail.date,
+      taskRecords: []
     })
-   if(app.getOneDayAllRecordMS(Date.now()) != null) {
+    const todayRecord = app.getOneDayAllRecordMS(new Date(e.detail.date).getTime())
+   if(todayRecord.length != 0) {
+     const taskRecords = []
+     for (let i = 0; i < todayRecord.length; ++i){
+        taskRecords.push(app.get_formated_record(todayRecord[i]))
+      }
      this.setData({
-       hasData: true
+        hasData: true,
+        taskRecords
      })
    }
+   wx.setStorageSync('taskRecords', this.data.taskRecords)
   },
 
   // 添加记录
@@ -190,13 +198,15 @@ Page({
       })
     } else if(e.detail.index == 1) {
       const dialogEditIndex = e.currentTarget.dataset.idx
+      const dialogEditID = e.currentTarget.dataset.recordid
       this.setData({
         dialogEditShow: true,
         dialogEditTitle: "编辑记录",
-        dialogEditIndex
+        dialogEditIndex,
+        dialogEditID
       })
     } else if(e.detail.index == 2) {
-      const dialogDeleteIndex = e.currentTarget.dataset.idx
+      const dialogDeleteIndex = e.currentTarget.dataset.recordid
       this.setData({
         dialogDeleteShow: true,
         dialogDeleteTitle: "删除记录",
@@ -223,7 +233,7 @@ Page({
         exitTime: this.data.taskRecords[this.data.dialogEditIndex].exitTime,
         taskTime: parseInt(this.data.taskRecords[this.data.dialogEditIndex].taskTime)
       }
-      app.setRecord(this.data.dialogEditIndex, app.make_record(editRecord))
+      app.setRecord(this.data.dialogEditID, app.make_record(editRecord))
       this.setData({
         taskRecords: this.data.taskRecords
       })
@@ -248,7 +258,7 @@ Page({
     const index = this.data.dialogDeleteIndex
     if(e.detail.index == 1) {
       app.deleteRecord(index)
-      const todayRecord = app.getOneDayAllRecordMS(Date.now())
+      const todayRecord = app.getOneDayAllRecordMS(new Date(this.data.newDate).getTime())
       const taskRecords = []
       for (let i = 0; i < todayRecord.length; ++i){
         console.log(app.get_formated_record(todayRecord[i]))
@@ -256,6 +266,12 @@ Page({
       }
       this.setData({
         taskRecords: taskRecords,
+        dialogDeleteShow: false,
+        dialogDeleteIndex: null,
+        showMoreOptionsIndex: null,
+      })
+    } else {
+      this.setData({
         dialogDeleteShow: false,
         dialogDeleteIndex: null,
         showMoreOptionsIndex: null,
