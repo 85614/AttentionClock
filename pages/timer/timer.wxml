@@ -3,7 +3,7 @@
 <view class='clock'  style="margin-top: 40rpx">
 
   <!-- 计时器 -->
-  <view class="progress" wx:if="{{!fail}}">
+  <view class="progress" wx:if="{{!okShow}}">
     <canvas canvas-id="progress-bg" class="progress-bg"></canvas>
     <canvas canvas-id="progress-active" class="progress-active"></canvas>
     <view class="progress-text">{{timeStr}}</view>
@@ -17,11 +17,11 @@
   </view>
 
   <!-- 成功页面 -->
-  <!-- <view class="progress1" wx:if="{{okShow}}">
+  <view class="progress1" wx:if="{{okShow && !fail}}">
       <view class="progress-text1" style="height:auto;">任务成功！</view>
       <view class="progress-text1" style="height:auto;">成功专注时间：{{taskTimeStr}}</view>
       <view class="progress-text1" style="height:auto;">离开时间总计：{{totExitTimeStr}}</view>
-  </view> -->
+  </view>
 
   <!-- 按钮 -->
   <view class="btns" style="margin-top: 230rpx;">

@@ -105,6 +105,7 @@ CustomPage({
       id: app.getNextTaskId(),
       name: this.data.newTaskName,
       minutes: this.data.newTaskTime,
+      valid: true
     }
     this.data.tasks.unshift(t)
     this.setData({

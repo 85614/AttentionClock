@@ -44,9 +44,9 @@ Page({
     var res = wx.getSystemInfoSync()
     var rate = 750 / res.windowWidth
 
-    // this.data.time = app.getTaskById(parseInt(option.id)).minutes
+    this.data.time = app.getTaskById(parseInt(option.id)).minutes
 
-    this.setData({
+    this.setData({    
       rate: rate,
       taskTimeStr: parseInt(this.data.time) >= 10 ? this.data.time + ':00' : '0' + this.data.time + ':00',
     })
@@ -244,7 +244,6 @@ Page({
       } else { // 离开时间超出限制
         
         _this.setData({
-          exitTimeStr: '', 
           okShow: true,
           pauseShow: false,
           continueCancelShow: false,

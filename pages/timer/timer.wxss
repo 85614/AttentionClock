@@ -67,7 +67,7 @@ page{
 }
 
 .progress1{
-  width: auto;
+  width: 100%;
   height: 600rpx;
   /* background-color: orange; */
   margin: 140rpx auto;
@@ -75,6 +75,7 @@ page{
   /* margin-left: auto;
   margin-right: auto; */
   position: relative;
+  top: 20%;
 }
 .progress-text1{
   width: auto;
@@ -83,7 +84,7 @@ page{
   font-size: 50rpx;
   color: #fff;
   text-align: center;
-  position: absolute;
+  position: relative;
   margin-left: auto;
   margin-right: auto;
   /* margin-bottom: 25rpx; */

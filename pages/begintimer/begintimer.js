@@ -16,6 +16,9 @@ Page({
     console.log("onLoad")
     console.log("option:", option)
     this.data.id = parseInt(option.id)
+    this.setData({
+      time: app.getTaskById(this.data.id).minutes
+    })
     // 系统设备信息
     var res = wx.getSystemInfoSync()
     var rate = 750 / res.windowWidth
