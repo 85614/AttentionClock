@@ -6,8 +6,12 @@ cloud.init()
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
-  db.collection('tasks').doc(event._id).remove({
-    success: function(res) {}
+  const newTasks = event.newTask
+  db.collection('tasks').doc(newTasks._id).set({
+    data: newTasks,
+    success: function(res) {},
+    fail: console.error,
   })
+
   return {}
 }
