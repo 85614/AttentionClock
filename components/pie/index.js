@@ -68,13 +68,13 @@ Page({
   // 向前进一个时间段
   forward() {
     let cur = this.data.curDate
-    if (curState === 0) { // 日
+    if (this.data.curState === 0) { // 日
       this.data.curDate.setDate(cur.getDate() + 1)
     }
-    else if (curState === 1) { // 周
+    else if (this.data.curState === 1) { // 周
       this.data.curDate.setDate(cur.getDate() + 7 - cur.getDay());
     }
-    else if (curState === 2) { // 月
+    else if (this.data.curState === 2) { // 月
       this.data.curDate = new Date(cur.getFullYear(), cur.getMonth() + 1, 1)
     }
     else {  // 年
@@ -86,13 +86,13 @@ Page({
   // 向后退一个时间段
   back() {
     let cur = this.data.curDate
-    if (curState === 0) { // 日
+    if (this.data.curState === 0) { // 日
       this.data.curDate.setDate(cur.getDate() - 1)
     }
-    else if (curState === 1) { // 周
+    else if (this.data.curState === 1) { // 周
       this.data.curDate.setDate(cur.getDate() - 7 - cur.getDay());
     }
-    else if (curState === 2) { // 月
+    else if (this.data.curState === 2) { // 月
       this.data.curDate.setDate(cur.getFullYear(), cur.getMonth() - 1, 1)
     }
     else {  // 年
@@ -134,15 +134,15 @@ Page({
     };
 
     let records    
-    if (this.curState === 0) { // 日
+    if (this.data.curState === 0) { // 日
       records = app.getSomeDayRecordstatistics(curDate.getTime())
       console.log("getting day records ", records)
     }
-    else if (this.curState === 1) { // 周
+    else if (this.data.curState === 1) { // 周
       records = app.getSomeWeekRecordstatistics(curDate.getTime())
       console.log("getting week records ", records)
     }
-    else if (this.curState === 2) { // 月
+    else if (this.data.curState === 2) { // 月
       records = app.getSomeMonthRecordstatistics(curDate.getTime())
       console.log("getting month records ", records)
     }
