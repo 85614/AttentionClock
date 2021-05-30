@@ -8,6 +8,7 @@ App({
     console.log('App Launch')
     this.AddFormatToDate()
     this.test()
+    this.addRecordsForTest()
   },
   onShow: function () {
     console.log('App Show')
@@ -199,27 +200,36 @@ App({
       if (record[i] && record[i].startTime >= ms_start && record[i].startTime < ms_end)
         ans.push(record[i])
     }
-    if (ans.length === 0) {
-      console.log("无数据，填充数据以测试")
-      this.addRecordForTest(ms_start, ms_end)
-      return this.getRecordTimeRange(d_start, d_end)
-    }
     return ans
   },
   addRecordForTest(ms_start, ms_end) {
-    const n = 10;
-    for (let i = 0; i < n; ++i) {
-      this.addRecord({
-        taskID: i % this.globalData.tasks.length,
-        recordID: this.globalData.recordID++,
-        startTime: ms_start + i * parseInt((ms_end-ms_start) / n),
-        isFinish: i == 0 ? 0 : 1,
-        exitTime: i,  // ms
-        durationTime: parseInt((ms_end-ms_start) / n), // ms
-      })
-    }
+    
   },
 
+  addRecordsForTest() {
+    let year = 2019
+    let day = 1;
+    let date
+    while(year <= 2021) {
+      if(Math.round(Math.random())) {
+        date = new Date(2019, 0, day, 8)
+        year = date.getFullYear();
+        let count = Math.floor(Math.random()*10)
+        for(let i = 0; i < count; i++) {
+          this.addRecord({
+            taskID: i % this.globalData.tasks.length,
+            recordID: i,
+            startTime: date.getTime(),
+            isFinish: i == 0 ? 0 : 1,
+            exitTime: i,  // ms
+            durationTime: Math.floor(Math.random()*8640000),
+          })
+        }
+      }
+      day++;
+    }
+    console.log(this.globalData.record)
+  },
   AddFormatToDate(){
     // 让Date有format函数
     Date.prototype.format = function (fmt) {
@@ -287,11 +297,6 @@ App({
           ans[r.taskID].count ++;
           ans[r.taskID].total_time += parseInt(r.durationTime / 1000 / 60)
         }
-      }
-      if (ans.length === 0) {
-        console.log("无数据，填充数据以测试")
-        this.addRecordForTest(ms_start, ms_end)
-        return this.getRangeRecordStatistics(d_start, d_end)
       }
       return ans
     },

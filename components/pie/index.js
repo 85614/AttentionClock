@@ -49,7 +49,7 @@ const YearState = {
     d.setFullYear(d.getFullYear()-1)
   },
   getRecords: function(d) {
-    return app.getSomeMonthRecordstatistics(d.getTime())
+    return app.getSomeYearRecordstatistics(d.getTime())
   },
 
 }
