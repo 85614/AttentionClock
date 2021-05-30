@@ -12,7 +12,7 @@ const dayState = {
     d.setDate(d.getDate()-1)
   },
   getRecords: function(d) {
-    return app.getSomeDayRecordstatistics(d.getTime())
+    return app.getSomeDayDayDistribution(d.getTime())
   }
 }
 
@@ -24,7 +24,7 @@ const WeekState = {
     d.setDate(d.getDate()-7)
   },
   getRecords: function(d) {
-    return app.getSomeWeekRecordstatistics(d.getTime())
+    return app.getSomeWeekDayDistribution(d.getTime())
   }
 }
 
@@ -36,7 +36,7 @@ const MonthState = {
     d.setMonth(d.getMonth()-1)
   },
   getRecords: function(d) {
-    return app.getSomeMonthRecordstatistics(d.getTime())
+    return app.getSomeMonthDayDistribution(d.getTime())
   },
 }
 
@@ -48,16 +48,14 @@ const YearState = {
     d.setFullYear(d.getFullYear()-1)
   },
   getRecords: function(d) {
-    return app.getSomeYearRecordstatistics(d.getTime())
+    return app.getSomeYearDayDistribution(d.getTime())
   },
 
 }
 
 let curState = dayState
 
-let theTime = new Date()
-
-const curDate = theTime
+let curDate = new Date()
 
 const optionMaker = function() {
   let option = {
@@ -123,10 +121,10 @@ const optionMaker = function() {
       },
     ]
   }
-  const data = app.getSomeMonthDayDistribution(theTime.getTime())
+  const data = curState.getRecords(curDate)
   const series0data = option.series[0].data
   const xAxis0data = option.xAxis[0].data
-  console.log(theTime, "日工作时间段分布data", data)
+  console.log(curDate, "日工作时间段分布data", data)
   let i = 0;
   for (; i < data.length; ++i) {
     if (data[i])

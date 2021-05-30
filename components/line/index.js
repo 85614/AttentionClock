@@ -2,9 +2,58 @@ import * as echarts from '../../ec-canvas/echarts';
 
 const app = getApp();
 
-let theMonth = new Date()
 
-let _chart
+const WeekState = {
+  forward: function(d) {
+    d.setDate(d.getDate()+7)
+  },
+  back: function(d){
+    d.setDate(d.getDate()-7)
+  },
+  getRecords: function(d) {
+    return app.getSomeWeekDistribution(d.getTime())
+  },
+  xAxisLabel: function(d, i) {
+    const strs = '天一二三四五六'
+    return "星期" + strs[i]
+  }
+}
+
+const MonthState = {
+  forward: function(d) {
+    d.setMonth(d.getMonth()+1)
+  },
+  back: function(d){
+    d.setMonth(d.getMonth()-1)
+  },
+  getRecords: function(d) {
+    return app.getSomeMonthDistribution(d.getTime())
+  },
+  xAxisLabel: function(d, i) {
+    return d.getMonth() + "-" + i
+  }
+}
+
+const YearState = {
+  forward: function(d) {
+    d.setFullYear(d.getFullYear()+1)
+  },
+  back: function(d){
+    d.setFullYear(d.getFullYear()-1)
+  },
+  getRecords: function(d) {
+    return app.getSomeYearDistribution(d.getTime())
+  },
+  xAxisLabel: function(d, i) {
+    return d.getFullYear() + "-" + i
+  }
+}
+
+let curState = WeekState
+
+let curDate = new Date()
+
+let chart
 
 const optionMaker = function() {
 
@@ -100,20 +149,20 @@ const optionMaker = function() {
   option.series[0].data = []
   const dAxisData = option.xAxis.data
   const series0Data  = option.series[0].data
-  const dis = app.getSomeMonthDistribution(theMonth.getTime())
+  const dis = curState.getRecords(curDate)
   let i = 0;
   for (; i < dis.length; ++i) 
     if (dis[i])
       break
   for (; i < dis.length; ++i) {
-    dAxisData.push(theMonth.getMonth() + "-" + i)
+    dAxisData.push( curState.xAxisLabel(curDate, i))
     series0Data.push(dis[i] || 0)
   }
   return option
 }
 
 function initChart(canvas, width, height, dpr) {
-  const chart = echarts.init(canvas, null, {
+  chart = echarts.init(canvas, null, {
     width: width,
     height: height,
     devicePixelRatio: dpr // new
@@ -121,7 +170,6 @@ function initChart(canvas, width, height, dpr) {
   canvas.setChart(chart);
   
   chart.setOption(optionMaker());
-  _chart = chart
   return chart;
 }
 
@@ -138,15 +186,62 @@ Page({
     ec: {
       onInit: initChart
     },
-    monthStr: theMonth.format("yyyy年MM月")
+    dateStr: curDate.format("yyyy年MM月dd日"),
+    buttonWeek: 1,
+    buttonMonth: 2,
+    buttonYear: 3,
+    buttonChecked: 1
   },
 
   test(){
     console.log("test")
     this.onShow()
   },
+  resetData() {
+    this.setData({
+      dateStr: curDate.format("yyyy年MM月dd日"),
+    })
+    chart.setOption(optionMaker())
+  },
   onShow() {
-    console.log("line onShow flush")
-    _chart.setOption(optionMaker())
+    console.log('bar onShow')
+    this.resetData()
+  },
+  
+
+  buttonWeekTap(e) {
+    curState = WeekState
+    console.log(e)
+    this.setData({
+      buttonChecked: this.data.buttonWeek
+    })
+    this.resetData()
+  },
+
+  buttonMonthTap(e) {
+    curState = MonthState
+    console.log(e)
+    this.setData({
+      buttonChecked: this.data.buttonMonth
+    })
+    this.resetData()
+  },
+
+  buttonYearTap(e) {
+    curState = YearState
+    console.log(e)
+    this.setData({
+      buttonChecked: this.data.buttonYear
+    })
+    this.resetData()
+  },
+
+  lastDate() {
+    curState.back(curDate)
+    this.resetData()
+  },
+  nextDate() {
+    curState.forward(curDate)
+    this.resetData()
   }
 });

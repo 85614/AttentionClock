@@ -202,9 +202,7 @@ App({
     }
     return ans
   },
-  addRecordForTest(ms_start, ms_end) {
-    
-  },
+ 
 
   addRecordsForTest() {
     let year = 2019
@@ -212,7 +210,7 @@ App({
     let date
     while(year <= 2021) {
       if(Math.round(Math.random())) {
-        date = new Date(2019, 0, day, 8)
+        date = new Date(2019, 0, day, 8 + Math.floor(Math.random()*12))
         year = date.getFullYear();
         let count = Math.floor(Math.random()*10)
         for(let i = 0; i < count; i++) {
@@ -311,21 +309,34 @@ App({
     },
 
     getSomeWeekRecordstatistics(ms){
-      // 获取某天的记录统计结果
+      // 获取某周的记录统计结果
       return this.getRangeRecordStatistics(...this.getWeekRangeMS(ms))
     },
     getSomeMonthRecordstatistics(ms){
-      // 获取某天的记录统计结果
+      // 获取某月的记录统计结果
       return this.getRangeRecordStatistics(...this.getMonthRangeMS(ms))
     },
     getSomeYearRecordstatistics(ms){
-      // 获取某天的记录统计结果
+      // 获取某年的记录统计结果
       return this.getRangeRecordStatistics(...this.getYearRangeMS(ms))
+    },
+
+    getSomeWeekDistribution(ms){
+      // 获取一周内每天的工作时间
+      const monthData = this.getRecordTimeRange(...this.getWeekRangeMS(ms))
+      let ans = []
+      for (let i = 0; i < monthData.length; ++i){
+        const x = monthData[i]
+        const d = new Date(x.startTime).getDay()
+        ans[d] = ans[d] || 0
+        ans[d] += parseInt(x.durationTime / 1000 / 60)
+      }
+      // console.log('月分布', ans)
+      return ans
     },
 
     getSomeMonthDistribution(ms){
       // 获取一个月内每天的工作时间
-      this.addRecordForTest(ms - oneDayMs * 30, ms)
       const monthData = this.getRecordTimeRange(...this.getMonthRangeMS(ms))
       let ans = []
       for (let i = 0; i < monthData.length; ++i){
@@ -340,7 +351,6 @@ App({
     
     getSomeYearDistribution(ms){
       // 获取一年内每个月的工作时间
-      this.addRecordForTest(ms - oneDayMs * 465, ms)
       const monthData = this.getRecordTimeRange(...this.getYearRangeMS(ms))
       let ans = []
       for (let i = 0; i < monthData.length; ++i){
@@ -359,9 +369,23 @@ App({
       return this.getDayDistribution(...this.getMonthRangeMS(ms))
     },
     
+    getSomeYearDayDistribution(ms) {
+      // 获取一个月 一天内每个时间段的工作事件
+      return this.getDayDistribution(...this.getYearRangeMS(ms))
+    },
+
+    getSomeWeekDayDistribution(ms) {
+      // 获取一个月 一天内每个时间段的工作事件
+      return this.getDayDistribution(...this.getWeekRangeMS(ms))
+    },
+
+    getSomeDayDayDistribution(ms) {
+      // 获取一个月 一天内每个时间段的工作事件
+      return this.getDayDistribution(...this.getDayRangeMS(ms))
+    },
+
     getDayDistribution(d_start, d_end) {
       // 获取 某一时间段内的工作时间分布（在一天中每个时间段内，分别工作了多少时间）
-      this.addRecordForTest(d_start.getTime(), d_end.getTime())
       const monthData = this.getRecordTimeRange(d_start, d_end)
       let ans = []
       for (let i = 0; i < monthData.length; ++i) {

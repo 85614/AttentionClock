@@ -3,3 +3,39 @@ ec-canvas {
   width: 100%;
   height: 100%;
 }
+
+.pie-box {
+  position: relative;
+}
+
+.my-icon {
+  margin: 0 10px;
+}
+
+.button-dwm {
+  flex-grow: 1;
+  padding: 0;
+  font: menu;
+  height: fit-content;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-radius: 5px 0 0 5px;
+  background: white;
+  border: 1rpx solid #626466;
+}
+
+.button-left {
+  border-radius: 5px 0 0 5px;
+}
+
+.button-mid {
+  border-radius: 0;
+}
+
+.button-right {
+  border-radius: 0 5px 5px 0;
+}
+
+.tap {
+  background-color: skyblue;  
+}
