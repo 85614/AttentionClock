@@ -3,7 +3,7 @@ import * as echarts from '../../ec-canvas/echarts';
 const app = getApp();
 const curDate = new Date()
 
-let _chart
+let chart
 
 const dayState = {
   forward: function(d) {
@@ -103,7 +103,7 @@ const optionMaker = function() {
 }
 
 function initChart(canvas, width, height, dpr) {
-  const chart = echarts.init(canvas, null, {
+  chart = echarts.init(canvas, null, {
     width: width,
     height: height,
     devicePixelRatio: dpr // new
@@ -112,7 +112,6 @@ function initChart(canvas, width, height, dpr) {
 
   const option = optionMaker()
   chart.setOption(option);
-  _chart = chart
   return chart;
 }
 
@@ -143,7 +142,7 @@ Page({
     this.setData({
       dateStr: curDate.format("yyyy年MM月dd日"),
     })
-    _chart.setOption(optionMaker())
+    chart.setOption(optionMaker())
   },
 
   test(){
@@ -153,7 +152,7 @@ Page({
   
   onShow() {
     console.log("pie onShow flush")
-    _chart.setOption(optionMaker())
+    this.resetData()
   },
 
   buttonDayTap (e) {

@@ -4,7 +4,60 @@ const app = getApp()
 
 let chart
 
+const dayState = {
+  forward: function(d) {
+    d.setDate(d.getDate()+1)
+  },
+  back: function(d){
+    d.setDate(d.getDate()-1)
+  },
+  getRecords: function(d) {
+    return app.getSomeDayRecordstatistics(d.getTime())
+  }
+}
+
+const WeekState = {
+  forward: function(d) {
+    d.setDate(d.getDate()+7)
+  },
+  back: function(d){
+    d.setDate(d.getDate()-7)
+  },
+  getRecords: function(d) {
+    return app.getSomeWeekRecordstatistics(d.getTime())
+  }
+}
+
+const MonthState = {
+  forward: function(d) {
+    d.setMonth(d.getMonth()+1)
+  },
+  back: function(d){
+    d.setMonth(d.getMonth()-1)
+  },
+  getRecords: function(d) {
+    return app.getSomeMonthRecordstatistics(d.getTime())
+  },
+}
+
+const YearState = {
+  forward: function(d) {
+    d.setFullYear(d.getFullYear()+1)
+  },
+  back: function(d){
+    d.setFullYear(d.getFullYear()-1)
+  },
+  getRecords: function(d) {
+    return app.getSomeYearRecordstatistics(d.getTime())
+  },
+
+}
+
+let curState = dayState
+
 let theTime = new Date()
+
+const curDate = theTime
 
 const optionMaker = function() {
   let option = {
@@ -209,14 +262,72 @@ Page({
   data: {
     ec: {
       onInit: initChart
-    }
+    },
+    dateStr: curDate.format("yyyy年MM月dd日"),
+    buttonDay: 0,
+    buttonWeek: 1,
+    buttonMonth: 2,
+    buttonYear: 3,
+    buttonChecked: 0
   },
   test(){
     console.log('bar test')
     // this.onShow()
   },
-  onShow(){
-    console.log('bar onShow')
+    // 根据新的状态重置数据
+  resetData() {
+    this.setData({
+      dateStr: curDate.format("yyyy年MM月dd日"),
+    })
     chart.setOption(optionMaker())
+  },
+  onShow() {
+    console.log('bar onShow')
+    this.resetData()
+  },
+  buttonDayTap(e) {
+    curState = dayState
+    console.log(e)
+    this.setData({
+      buttonChecked: this.data.buttonDay
+    })
+    this.resetData()
+  },
+
+  buttonWeekTap(e) {
+    curState = WeekState
+    console.log(e)
+    this.setData({
+      buttonChecked: this.data.buttonWeek
+    })
+    this.resetData()
+  },
+
+  buttonMonthTap(e) {
+    curState = MonthState
+    console.log(e)
+    this.setData({
+      buttonChecked: this.data.buttonMonth
+    })
+    this.resetData()
+  },
+
+  buttonYearTap(e) {
+    curState = YearState
+    console.log(e)
+    this.setData({
+      buttonChecked: this.data.buttonYear
+    })
+    this.resetData()
+  },
+
+  lastDate() {
+    curState.back(curDate)
+    this.resetData()
+  },
+  nextDate() {
+    curState.forward(curDate)
+    this.resetData()
   }
+
 });
