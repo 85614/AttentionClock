@@ -4,7 +4,7 @@
     专注时长分布 {{today||"1970-01-01"}}
   </view>
   <view style="flex-grow: 1; position: relative">
-    <view wx:if="{{!change}}" class="full-screen-container">
+    <view class="full-screen-container">
       <ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ ec }}"></ec-canvas>
     </view>
   </view>

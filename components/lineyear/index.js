@@ -2,12 +2,11 @@ import * as echarts from '../../ec-canvas/echarts';
 
 const app = getApp();
 
-let theMonth = new Date()
+let theYear = new Date()
 
 let _chart
 
 const optionMaker = function() {
-
   let option = {
     title: {
       text: '测试下面legend的红色区域不应被裁剪',
@@ -100,13 +99,13 @@ const optionMaker = function() {
   option.series[0].data = []
   const dAxisData = option.xAxis.data
   const series0Data  = option.series[0].data
-  const dis = app.getSomeMonthDistribution(theMonth.getTime())
+  const dis = app.getSomeYearDistribution(theYear.getTime())
   let i = 0;
   for (; i < dis.length; ++i) 
     if (dis[i])
       break
   for (; i < dis.length; ++i) {
-    dAxisData.push(theMonth.getMonth() + "-" + i)
+    dAxisData.push((i+1) + "月" )
     series0Data.push(dis[i] || 0)
   }
   return option
@@ -118,9 +117,8 @@ function initChart(canvas, width, height, dpr) {
     height: height,
     devicePixelRatio: dpr // new
   });
-  canvas.setChart(chart);
-  
-  chart.setOption(optionMaker());
+  canvas.setChart(chart)
+  chart.setOption(optionMaker())
   _chart = chart
   return chart;
 }
@@ -138,15 +136,14 @@ Page({
     ec: {
       onInit: initChart
     },
-    monthStr: theMonth.format("yyyy年MM月")
+    yearStr: theYear.format("yyyy年MM月")
   },
-
   test(){
     console.log("test")
-    this.onShow()
+    // this.onShow()
   },
   onShow() {
-    console.log("line onShow flush")
+    console.log("line year onShow flush")
     _chart.setOption(optionMaker())
   }
 });

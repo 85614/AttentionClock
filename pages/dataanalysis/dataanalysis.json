@@ -2,7 +2,8 @@
   "usingComponents": {
     "my-bar": "../../components/bar/index",
     "my-pie": "../../components/pie/index",
-    "my-line": "../../components/line/index"
+    "my-line": "../../components/line/index",
+    "my-line-year": "../../components/lineyear/index"
   },
   
   "navigationBarTitleText": "UI组件库"

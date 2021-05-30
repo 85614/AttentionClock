@@ -331,7 +331,20 @@ App({
       // console.log('月分布', ans)
       return ans
     },
-
+    
+    getSomeYearDistribution(ms){
+      this.addRecordForTest(ms - oneDayMs * 465, ms)
+      const monthData = this.getRecordTimeRange(...this.getYearRangeMS(ms))
+      let ans = []
+      for (let i = 0; i < monthData.length; ++i){
+        const x = monthData[i]
+        const d = new Date(x.startTime).getMonth()
+        ans[d] = ans[d] || 0
+        ans[d] += parseInt(x.durationTime / 1000 / 60)
+      }
+      // console.log('月分布', ans)
+      return ans
+    },
     // 获取某月工作时段分布
 
 

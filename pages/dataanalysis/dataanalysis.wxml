@@ -51,4 +51,9 @@
         </view>
     </view>
 
+    <view class="box">
+        <view class="chart-box" style="height: 300px">
+            <my-line-year></my-line-year>
+        </view>
+    </view>
 </view>

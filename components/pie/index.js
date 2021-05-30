@@ -2,15 +2,12 @@ import * as echarts from '../../ec-canvas/echarts';
 
 const app = getApp();
 const today = new Date()
-function initChart(canvas, width, height, dpr) {
-  const chart = echarts.init(canvas, null, {
-    width: width,
-    height: height,
-    devicePixelRatio: dpr // new
-  });
-  canvas.setChart(chart);
 
-  var option = {
+let _chart
+
+const optionMaker = function() {
+  
+  let option = {
     backgroundColor: "#ffffff",
     series: [{
       label: {
@@ -51,9 +48,27 @@ function initChart(canvas, width, height, dpr) {
       })
     }
   }
+  // // for test
+  // today.setDate(0)
+  // data.push({
+  //   name: today + "",
+  //   value: 100
+  // })
   option.series[0].data = data
-  // console.log("pie data", data)
+  return option
+}
+
+function initChart(canvas, width, height, dpr) {
+  const chart = echarts.init(canvas, null, {
+    width: width,
+    height: height,
+    devicePixelRatio: dpr // new
+  });
+  canvas.setChart(chart);
+
+  const option = optionMaker()
   chart.setOption(option);
+  _chart = chart
   return chart;
 }
 
@@ -75,15 +90,12 @@ Page({
 
   test(){
     console.log("test")
+    // this.onShow()
   },
   
   onShow() {
     console.log("pie onShow flush")
-    this.setData({
-      change: true
-    })
-    this.setData({
-      change: false
-    })
+    _chart.setOption(optionMaker())
+    // today.setDate(0)
   }
 });
