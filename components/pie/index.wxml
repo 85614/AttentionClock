@@ -3,6 +3,7 @@
   <view style="flex-grow: 0; font-size: 0.7em;" bindtap="test">
     专注时长分布 {{today||"1970-01-01"}}
   </view>
+  <button class="mini-btn" type="primary" size="mini" bindtap="test">按钮</button>
   <view style="flex-grow: 1; position: relative">
     <view class="full-screen-container">
       <ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ ec }}"></ec-canvas>
