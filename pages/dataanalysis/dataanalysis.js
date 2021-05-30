@@ -2,6 +2,8 @@ import CustomPage from '../../base/CustomPage'
 
 const app = getApp()
 
+let curDate = new Date()
+
 CustomPage({
 
   /**
@@ -33,21 +35,43 @@ CustomPage({
    */
   onShow: function () {
     console.log("data center onshow")
-    const todayRecords = app.getSomeDayRecordstatistics(Date.now())
+    this.setData({
+      total_time: app.get_finished_total_time(),
+      total_count: app.get_finished_count(),
+    })
+    this.updateSomeDayData()
+  },
+
+
+  updateSomeDayData(){
     let today_count = 0
     let today_time = 0;
-    const today = new Date().format("yyyy-MM-dd")
-    for (let i = 0; i < todayRecords.length; ++i) {
-      today_count += todayRecords[i] ? todayRecords[i].count : 0
-      today_time += todayRecords[i] ? todayRecords[i].total_time : 0
+    const records = app.getSomeDayRecordstatistics(curDate.getTime())
+    const dateStr = curDate.format("yyyy-MM-dd")
+    for (let i = 0; i < records.length; ++i) {
+      today_count += records[i] ? records[i].count : 0
+      today_time += records[i] ? records[i].total_time : 0
+    }
+    for (let i = 0; i < records.length; ++i) {
+      today_count += records[i] ? records[i].count : 0
+      today_time += records[i] ? records[i].total_time : 0
     }
     this.setData({
       total_time: app.get_finished_total_time(),
       total_count: app.get_finished_count(),
       today_count,
       today_time,
-      today
+      dateStr
     })
+  },
+
+  lastDate(){
+    curDate.setDate(curDate.getDate() - 1)
+    this.updateSomeDayData()
+  },
+  nextDate(){
+    curDate.setDate(curDate.getDate() + 1)
+    this.updateSomeDayData()
   },
 
   /**

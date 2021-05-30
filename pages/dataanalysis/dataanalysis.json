@@ -3,7 +3,7 @@
     "my-bar": "../../components/bar/index",
     "my-pie": "../../components/pie/index",
     "my-line": "../../components/line/index",
-    "my-line-year": "../../components/lineyear/index"
+    "mp-icon": "weui-miniprogram/icon/icon"
   },
   
   "navigationBarTitleText": "UI组件库"
