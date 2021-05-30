@@ -5,6 +5,7 @@ const app = getApp()
 
 CustomPage({
   data: {
+    dialogAgentDeleteShow: false,
     TaskEditingIdx : 1,
     checkTask: {
       name: 'newTaskName',
@@ -26,13 +27,7 @@ CustomPage({
         text: '取消'
       }, {
         text: '确定',
-        action: this.addTask
-      }],
-      dialogButtonsEdit: [{
-        text: '取消'
-      }, {
-        text: '确定',
-        action: this.updateTask
+        value: true
       }],
       dialogButtonsDetail: [{
         text: '确定',
@@ -98,8 +93,10 @@ CustomPage({
     })
   },
   deleteTask(idx) {
-    this.data.tasks.splice(idx, 1)
-    this.updateTasks()
+    this.setData({
+      dialogAgentDeleteShow: true, 
+      TaskDeletingIdx: idx
+    })
   },
   updateTasks() {
     this.setData({
@@ -158,7 +155,8 @@ CustomPage({
   tapDialogButton(e, o) {
     // 按下添加待办对话框的按钮
     console.log("tapDialogButton(e) e:", e, "owner;", o)
-    e.detail.item.action && e.detail.item.action()
+    if (e.detail.item.value)
+      this.addTask()
     this.setData({
       dialogAgentAddShow: false,
     })
@@ -166,7 +164,8 @@ CustomPage({
   tapDialogButtonEdit(e, o) {
     // 按下编辑待办对话框的按钮
     console.log("tapDialogButton(e) e:", e, "owner;", o)
-    e.detail.item.action && e.detail.item.action()
+    if (e.detail.item.value)
+      this.updateTask()
     this.setData({
       dialogAgentEditShow: false,
     })
@@ -175,6 +174,16 @@ CustomPage({
     // 按下待办详情对话框的按钮
     this.setData({
       dialogAgentDetailShow: false,
+    })
+  },
+  tapDialogButtonDelete(e, o) {
+    // 按下待办详情对话框的按钮
+    if (e.detail.item.value) {
+      this.data.tasks.splice(this.data.TaskDeletingIdx, 1)
+      this.updateTasks()
+    }
+    this.setData({
+      dialogAgentDeleteShow: false,
     })
   },
   inputNewTaskName(e) {

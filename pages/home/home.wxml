@@ -24,12 +24,15 @@
             <input type="number" value="{{newTaskTime}}" bindinput="inputNewTaskTime" style="text-align: left" placeholder="请输入时间"></input>
         </form>
     </mp-dialog>
-    <mp-dialog title="编辑待办" ext-class="my-dialog" show="{{dialogAgentEditShow}}" bindbuttontap="tapDialogButtonEdit" buttons="{{dialogButtonsEdit}}">
+    <mp-dialog title="编辑待办" ext-class="my-dialog" show="{{dialogAgentEditShow}}" bindbuttontap="tapDialogButtonEdit" buttons="{{dialogButtons}}">
         <form>
             <input value="{{tasks[TaskEditingIdx].name}}" auto-focus bindinput="inputTaskEditingName" style="margin-bottom: 10px; text-align: left"></input>
 
             <input type="number" bindinput="inputTaskEditingTime" style="text-align: left" value="{{tasks[TaskEditingIdx].minutes}}"></input>
         </form>
+    </mp-dialog>
+    <mp-dialog title="" ext-class="my-dialog" show="{{dialogAgentDeleteShow}}" bindbuttontap="tapDialogButtonDelete" buttons="{{dialogButtons}}">
+        确认删除？
     </mp-dialog>
     <mp-dialog title="待办详情" ext-class="my-dialog" show="{{dialogAgentDetailShow}}" bindbuttontap="tapDialogButtonDetail" buttons="{{dialogButtonsDetail}}">
         <view>
