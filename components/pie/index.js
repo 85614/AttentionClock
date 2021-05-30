@@ -188,6 +188,7 @@ Page({
     }
 
     _chart.setOption(option)
+    isButtonDayTap: true
   },
 
   test(){
@@ -199,5 +200,29 @@ Page({
     console.log("pie onShow flush")
     _chart.setOption(optionMaker())
     // today.setDate(0)
+  },
+
+  buttonDayTap (e) {
+    console.log(e)
+    this.setData({
+      isButtonDayTap: true,
+      isButtonWeekTap: false
+    })
+  },
+
+  buttonWeekTap (e) {
+    console.log(e)
+    this.setData({
+      isButtonDayTap: false,
+      isButtonWeekTap: true
+    })
+  },
+
+  buttonMonthTap (e) {
+    console.log(e)
+    this.setData({
+      isButtonDayTap: false,
+      isButtonWeekTap: false
+    })
   }
 });
