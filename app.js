@@ -80,8 +80,29 @@ App({
   },
 
   getTaskById(id) { // 待完善
-
+    console.log('get task ', id, this.globalData.tasks[id])
     return this.globalData.tasks[id]
+  },
+
+  addTask(t){
+    console.log('add task ', this.globalData.tasks.length, t)
+    this.globalData.tasks.push(t)
+  },
+  
+  setTaskById(id, t) { // 待完善
+    console.log('set task ', id, 'from', this.globalData.tasks[id], 'to', t)
+    Object.assign(this.globalData.tasks[id], t)
+  },
+
+  
+  deleteTaskById(id) { // 待完善
+    console.log('delete task ', id, this.globalData.tasks[id])
+    delete this.globalData.tasks[id]
+  },
+
+  getNextTaskId(){
+    console.log('next task id is', this.globalData.tasks.length)
+    return this.globalData.tasks.length
   },
 
   getRecord(id) {

@@ -20,9 +20,7 @@ CustomPage({
   },
   onLoad: function () {
     this.setData({
-      dialogAgentAddShow: false,
-      max_id: wx.getStorageSync('max_id') || 5,
-      
+      dialogAgentAddShow: false,      
       dialogButtons: [{
         text: '取消'
       }, {
@@ -52,24 +50,8 @@ CustomPage({
         action: this.deleteTask,
         extClass: 'slideview-button'
       }],
-      tasks: wx.getStorageSync('tasks') || [{
-        id: 0,
-        name: "待办是您要专注的事",
-        minutes: 1,
-      }, {
-        id: 1,
-        name: "右上角 + 号添加待办",
-        minutes: 10,
-      }, {
-        id: 2,
-        name: "左滑待办编辑或删除",
-        minutes: 25,
-      }, {
-        id: 3,
-        name: "点击开始按钮来专注计时",
-        minutes: 25,
-      }],
-    });
+      tasks: app.getTasks()
+    })
     this.updateTasks()
   },
   slideButtonTap(e) {
@@ -101,16 +83,15 @@ CustomPage({
   updateTasks() {
     this.setData({
       tasks: this.data.tasks,
-      max_id: this.data.max_id
     })
-    wx.setStorageSync("tasks", this.data.tasks)
-    wx.setStorageSync("max_id", this.data.max_id)
   },
   editTask(idx) {
     this.setData({
       dialogAgentEditShow: true, 
       TaskEditingIdx: idx
     })
+    this.data.TaskEditingName = this.data.tasks[idx].name
+    this.data.TaskEdigingTime = this.data.tasks[idx].minutes
   },
   TaskDetail(idx) {
     this.setData({
@@ -120,21 +101,26 @@ CustomPage({
   },
   addTask() {
     // 点击确认添加待办后
-    this.data.max_id += 1
-    this.data.tasks.unshift({
-      id: this.data.max_id,
+    const t = {
+      id: app.getNextTaskId(),
       name: this.data.newTaskName,
       minutes: this.data.newTaskTime,
-    })
+    }
+    this.data.tasks.unshift(t)
     this.setData({
       newTaskName: null,
       newTaskTime: null
     })
+    app.addTask(t)
     this.updateTasks()
   },
   updateTask() {
     // 更新修改
     console.log("before update task check tasks", this.data.tasks)
+    const t = this.data.tasks[this.data.TaskEditingIdx]
+    t.name = this.data.TaskEditingName
+    t.minutes = this.data.TaskEdigingTime
+    app.setTaskById(t.id, t)
     this.updateTasks()
   },
   openAddTaskDialog() {
@@ -178,6 +164,7 @@ CustomPage({
   },
   tapDialogButtonDelete(e, o) {
     // 按下待办详情对话框的按钮
+    app.deleteTaskById(this.data.tasks[this.data.TaskDeletingIdx].id)
     if (e.detail.item.value) {
       this.data.tasks.splice(this.data.TaskDeletingIdx, 1)
       this.updateTasks()
@@ -203,17 +190,16 @@ CustomPage({
     // 编辑待办对话框待办名称输入改变
     // console.log("inputNewTaskName(e) e:", e)
     console.log("inputNewTaskName(e) e.detail.value:", e.detail.value)
-    const TaskEditingName = e.detail.value
+    this.data.TaskEditingName = e.detail.value
     // console.log("this.TaskEditingIdx", this.data.TaskEditingIdx)
-    this.data.tasks[this.data.TaskEditingIdx].name = TaskEditingName
+    
     // console.log("in inputTaskEditingName this.data.tasks",this.data.tasks)
   },
   inputTaskEditingTime(e) {
     // 编辑待办对话框待办时间输入改变
     // console.log("inputNewTaskName(e) e:", e)
     console.log("inputNewTaskTime(e) e.detail.value:", e.detail.value)
-    const TaskEdigingTime = e.detail.value
-    this.data.tasks[this.data.TaskEditingIdx].minutes = TaskEdigingTime
+    this.data.TaskEdigingTime = e.detail.value
   }
 
 });
