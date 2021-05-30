@@ -15,9 +15,6 @@ ec-canvas {
 .button-dwm {
   flex-grow: 1;
   padding: 0;
-}
-
-.button-day {
   font: menu;
   height: fit-content;
   padding-top: 0;
@@ -27,55 +24,18 @@ ec-canvas {
   border: 1rpx solid #626466;
 }
 
-.button-week {
-  font: menu;
-  height: fit-content;
-  padding-top: 0;
-  padding-bottom: 0;
-  border-radius: 0;
-  background: white;
-  border: 1rpx solid #626466;
-}
-
-.button-month {
-  font: menu;
-  height: fit-content;
-  padding-top: 0;
-  padding-bottom: 0;
-  border-radius: 0 5px 5px 0;
-  background: white;
-  border: 1rpx solid #626466;
-}
-
-.button-day-tap {
-  font: menu;
-  height: fit-content;
-  padding-top: 0;
-  padding-bottom: 0;
+.button-left {
   border-radius: 5px 0 0 5px;
-  background-color: skyblue;
-  color: white;
-  border: 1rpx solid #626466;
 }
 
-.button-week-tap {
-  font: menu;
-  height: fit-content;
-  padding-top: 0;
-  padding-bottom: 0;
+.button-mid {
   border-radius: 0;
-  background-color: skyblue;
-  color: white;
-  border: 1rpx solid #626466;
 }
 
-.button-month-tap {
-  font: menu;
-  height: fit-content;
-  padding-top: 0;
-  padding-bottom: 0;
+.button-right {
   border-radius: 0 5px 5px 0;
-  background: skyblue;
-  color: white;
-  border: 1rpx solid #626466;
+}
+
+.tap {
+  background-color: skyblue;  
 }
