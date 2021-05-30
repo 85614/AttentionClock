@@ -110,7 +110,7 @@ Page({
     else if (nxt === 2) { // 月
       this.data.curDate.setDate(cur.getFullYear(), cur.getMonth(), 1)
     }
-    else {  // 年
+    else if (nxt === 3) {  // 年
       this.data.curDate.setDate(cur.getFullYear(), 1, 1)
     }
     resetData()
