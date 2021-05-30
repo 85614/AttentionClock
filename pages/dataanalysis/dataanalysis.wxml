@@ -41,19 +41,19 @@
 
     <view class="box">
         <view class="chart-box" style="height: 200px">
-            <my-pie></my-pie>
+            <my-pie id='my-pie'></my-pie>
         </view>
     </view>
     
     <view class="box">
         <view class="chart-box" style="height: 200px">
-            <my-bar></my-bar>
+            <my-bar id='my-bar'></my-bar>
         </view>
     </view>
     
     <view class="box">
         <view class="chart-box" style="height: 300px">
-            <my-line></my-line>
+            <my-line id='my-line'></my-line>
         </view>
     </view>
 

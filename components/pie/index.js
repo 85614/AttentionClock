@@ -115,6 +115,13 @@ function initChart(canvas, width, height, dpr) {
   return chart;
 }
 
+const resetChart = () => {
+  if (chart) {
+    chart.setOption(optionMaker())
+  }
+  console.log('pie reset chart')
+}
+
 Page({
   onShareAppMessage: function (res) {
     return {
@@ -133,7 +140,8 @@ Page({
     buttonWeek: 1,
     buttonMonth: 2,
     buttonYear: 3,
-    buttonChecked: 0
+    buttonChecked: 0,
+    resetDataFun: resetChart
   },
 
 
