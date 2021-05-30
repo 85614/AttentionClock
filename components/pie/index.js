@@ -75,10 +75,10 @@ Page({
       this.data.curDate.setDate(cur.getDate() + 7 - cur.getDay());
     }
     else if (this.data.curState === 2) { // 月
-      this.data.curDate = new Date(cur.getFullYear(), cur.getMonth() + 1, 1)
+      this.data.curDate.setDate(cur.getFullYear(), cur.getMonth() + 1, 1)
     }
     else {  // 年
-      this.data.curDate = new Date(cur.getFullYear() + 1, 1, 1)
+      this.data.curDate.setDate(cur.getFullYear() + 1, 1, 1)
     }
     this.resetData()
   },
