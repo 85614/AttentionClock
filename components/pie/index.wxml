@@ -9,22 +9,21 @@
   </view>
   <view >
     <view wx:if="{{isButtonDayTap}}" style="display:flex; flex-direction: row; width: 50%; margin:10px 25%;">
-      <button  class="button-day-tap" bindtap="buttonDayTap" data-idx="{{0}}">日</button>
-      <button  class="button-week" bindtap="buttonWeekTap" data-idx="{{1}}">周</button>
-      <button  class="button-month" bindtap="buttonMonthTap" data-idx="{{2}}">月</button>
+      <button  class="button-dwm button-day-tap" bindtap="buttonDayTap" data-idx="{{0}}">日</button>
+      <button  class="button-dwm button-week" bindtap="buttonWeekTap" data-idx="{{1}}">周</button>
+      <button  class="button-dwm button-month" bindtap="buttonMonthTap" data-idx="{{2}}">月</button>
     </view>
     <view wx:elif="{{isButtonWeekTap}}" style="display:flex; flex-direction: row; width: 50%; margin:10px 25%;">
-      <button  class="button-day" bindtap="buttonDayTap" data-idx="{{0}}">日</button>
-      <button  class="button-week-tap" bindtap="buttonWeekTap" data-idx="{{1}}">周</button>
-      <button  class="button-month" bindtap="buttonMonthTap" data-idx="{{2}}">月</button>
+      <button  class="button-dwm button-day" bindtap="buttonDayTap" data-idx="{{0}}">日</button>
+      <button  class="button-dwm button-week-tap" bindtap="buttonWeekTap" data-idx="{{1}}">周</button>
+      <button  class="button-dwm button-month" bindtap="buttonMonthTap" data-idx="{{2}}">月</button>
     </view>
     <view wx:else style="display:flex; flex-direction: row; width: 50%; margin:10px 25%;">
-      <button class="button-day" bindtap="buttonDayTap" data-idx="{{0}}">日</button>
-      <button class="button-week" bindtap="buttonWeekTap" data-idx="{{1}}">周</button>
-      <button class="button-month-tap" bindtap="buttonMonthTap" data-idx="{{2}}">月</button>
+      <button class="button-dwm button-day" bindtap="buttonDayTap" data-idx="{{0}}">日</button>
+      <button class="button-dwm button-week" bindtap="buttonWeekTap" data-idx="{{1}}">周</button>
+      <button class="button-dwm button-month-tap" bindtap="buttonMonthTap" data-idx="{{2}}">月</button>
     </view>
   </view>
-  <button class="mini-btn" type="primary" size="mini" bindtap="test">按钮</button>
   <view style="flex-grow: 1; position: relative">
     <view class="full-screen-container">
       <ec-canvas id="mychart-dom-pie" canvas-id="mychart-pie" ec="{{ ec }}"></ec-canvas>

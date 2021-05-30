@@ -88,6 +88,7 @@ Page({
     today: today.format("yyyy年MM月dd日"),
     curDate: today,
     curState: 0, // 0: 日， 1：周， 2：月，3：年
+    isButtonDayTap: true
   },
 
   // 向前进一个时间段
@@ -188,7 +189,6 @@ Page({
     }
 
     _chart.setOption(option)
-    isButtonDayTap: true
   },
 
   test(){

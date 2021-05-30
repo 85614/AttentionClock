@@ -12,6 +12,11 @@ ec-canvas {
   margin: 0 10px;
 }
 
+.button-dwm {
+  flex-grow: 1;
+  padding: 0;
+}
+
 .button-day {
   font: menu;
   height: fit-content;
