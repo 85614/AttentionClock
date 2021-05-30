@@ -40,7 +40,7 @@
     </view>
     
     <view class="box">
-        <view class="chart-box" style="height: 400px">
+        <view class="chart-box" style="height: 200px">
             <my-bar></my-bar>
         </view>
     </view>
@@ -51,9 +51,4 @@
         </view>
     </view>
 
-    <view class="box">
-        <view class="chart-box" style="height: 300px">
-            <my-line-year></my-line-year>
-        </view>
-    </view>
 </view>
