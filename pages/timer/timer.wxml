@@ -12,7 +12,7 @@
 
   <!-- 失败页面 -->
   <view class="progress1" wx:if="{{okShow && fail}}">
-      <view class="progress-text1" style="height:auto;">离开时间超过限制！</view>
+      <view class="progress-text1" wx:if="{{!setGiveUp}}" style="height:auto;">离开时间超过限制！</view>
       <view class="progress-text1" style="height:auto;">任务失败！</view>
   </view>
 

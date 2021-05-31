@@ -10,7 +10,7 @@ Page({
     time: '1', // 任务需要的总时间（分钟
     taskTimeStr: '',
 
-    exitTime: '5', // 离开的时间限制（分钟）
+    exitTime: '1', // 离开的时间限制（分钟）
     totalExitTime: 0, // 在本次专注中离开的总时间
     totExitTimeStr: '',
     exitTimeStr: '', // 离开时间示数
@@ -41,8 +41,8 @@ Page({
     console.log("onLoad")
     console.log("optiin:", option)
     // 系统设备信息
-    var res = wx.getSystemInfoSync()
-    var rate = 750 / res.windowWidth
+    let res = wx.getSystemInfoSync()
+    let rate = 750 / res.windowWidth
 
     this.data.time = app.getTaskById(parseInt(option.id)).minutes
 
@@ -70,17 +70,17 @@ Page({
   onUnload: function () {
     console.log("OnUnload")
     let _this = this
-    this.setData({
-      pauseShow: true,
-      continueCancelShow: false,
-      clockShow: false,
-      mTime: 0, // 白圈走的路清零
-      exitTimeStr: '',
-      exit: false,
-      okShow: false,
-      totalExitTime: 0, // 累计离开时间清0
-      fail: false,
-    })
+    // this.setData({
+    //   pauseShow: true,
+    //   continueCancelShow: false,
+    //   clockShow: false,
+    //   mTime: 0, // 白圈走的路清零
+    //   exitTimeStr: '',
+    //   exit: false,
+    //   okShow: false,
+    //   totalExitTime: 0, // 累计离开时间清0
+    //   fail: false,
+    // })
 
     // 如果失败，则存储记录
     if (!_this.data.okShow) {
@@ -132,16 +132,16 @@ Page({
 
   // 动圆函数 
   drawActive: function () {
-    var _this = this
-    var currentTime = parseInt(this.data.time) * 60 * 1000 - _this.data.mTime
-    var timestep = _this.data.timestep
-    var timer = setInterval(() => {
+    let _this = this
+    let currentTime = parseInt(this.data.time) * 60 * 1000 - _this.data.mTime
+    let timestep = _this.data.timestep
+    let timer = setInterval(() => {
       currentTime = currentTime - timestep //倒计时文字
 
       _this.setData({
         mTime: _this.data.mTime + timestep //每timestep ms执行一次，每次时间加timestep，并绘图
       })
-      var step = _this.data.mTime / (_this.data.time * 60 * 1000) * 2 * Math.PI + 1.5 * Math.PI
+      let step = _this.data.mTime / (_this.data.time * 60 * 1000) * 2 * Math.PI + 1.5 * Math.PI
 
       if (step < 3.5 * Math.PI) {
         if (currentTime % 1000) {
@@ -151,8 +151,8 @@ Page({
           })
         }
         //开始绘制动圆，每timestep ms绘制一次
-        var lineWidth = 7 / _this.data.rate //px
-        var ctx = wx.createCanvasContext('progress-active')
+        let lineWidth = 7 / _this.data.rate //px
+        let ctx = wx.createCanvasContext('progress-active')
         ctx.setLineWidth(lineWidth)
         ctx.setStrokeStyle('#fff')
         ctx.setLineCap('round')
@@ -162,16 +162,16 @@ Page({
         ctx.draw()
       } else {
         // 将完成的数据记录到日志
-        var logs = wx.getStorageSync('logs') || []
-        var ctx = wx.createCanvasContext('progress-active')
+        // let logs = wx.getStorageSync('logs') || []
+        let ctx = wx.createCanvasContext('progress-active')
         ctx.draw(false)
-        logs.unshift({
-          date: util.formatTime(new Date),
-          cate: _this.data.cateActive,
-          time: _this.data.time
-        })
-        // console.log(logs); 
-        wx.setStorageSync('logs', logs) // 把数据加到缓存
+        // logs.unshift({
+        //   date: util.formatTime(new Date),
+        //   cate: _this.data.cateActive,
+        //   time: _this.data.time
+        // })
+        // // console.log(logs); 
+        // wx.setStorageSync('logs', logs) // 把数据加到缓存
         _this.setData({
           timeStr: '', 
           okShow: true,
@@ -202,11 +202,11 @@ Page({
 
   // // 静圆函数，目前未使用
   // drawBg: function () {
-  //   var lineWidth = 7 / this.data.rate; //px
-  //   var ctx = wx.createCanvasContext('progress-bg');
+  //   let lineWidth = 7 / this.data.rate; //px
+  //   let ctx = wx.createCanvasContext('progress-bg');
   //   ctx.setLineWidth(lineWidth);
   //   ctx.setStrokeStyle('#fff');
-  //   // var gradient = context.createLinearGradient(200, 100, 100, 200);
+  //   // let gradient = context.createLinearGradient(200, 100, 100, 200);
   //   // gradient.addColorStop("0", "#2661DD");
   //   // gradient.addColorStop("0.5", "#40ED94");
   //   // gradient.addColorStop("1.0", "#5956CC");
@@ -233,19 +233,19 @@ Page({
       this.data.continueCancelShow = true
       this.data.exit = true
     }
-    var _this = this
-    var currentTime = parseInt(this.data.setGiveUp ? 0 : this.data.exitTime) * 60 * 1000
-    this.data.setGiveUp = false
-    var timestep = _this.data.timestep
-    var timer
+    let _this = this
+    let currentTime = parseInt(this.data.setGiveUp ? 0 : this.data.exitTime) * 60 * 1000
+    // this.data.setGiveUp = false
+    let timestep = _this.data.timestep
+    let timer
     this.data.exitTimer = timer = setInterval(() => {
       currentTime = currentTime - timestep // 倒计时文字
       _this.data.totalExitTime += timestep
-      // var step = _this.data.mTime / (_this.data.time * 60 * 1000) * 2 * Math.PI + 1.5 * Math.PI
+      // let step = _this.data.mTime / (_this.data.time * 60 * 1000) * 2 * Math.PI + 1.5 * Math.PI
 
       if (currentTime > 0) {
         if (currentTime % 1000) {
-          var strTime = _this.getFormat(currentTime)
+          let strTime = _this.getFormat(currentTime)
           _this.setData({
             exitTimeStr: strTime
           })
@@ -260,14 +260,14 @@ Page({
           totExitTimeStr: this.getFormat(this.data.totalExitTime),
         })
         // 将失败的数据记录到日志
-        var logs = wx.getStorageSync('logs') || [];
-        logs.unshift({
-          date: util.formatTime(new Date),
-          cate: _this.data.cateActive,
-          time: _this.data.time
-        });
-        // console.log(logs); 
-        wx.setStorageSync('logs', logs) // 把数据加到缓存
+        // let logs = wx.getStorageSync('logs') || [];
+        // logs.unshift({
+        //   date: util.formatTime(new Date),
+        //   cate: _this.data.cateActive,
+        //   time: _this.data.time
+        // });
+        // // console.log(logs); 
+        // wx.setStorageSync('logs', logs) // 把数据加到缓存
 
         clearInterval(this.data.exitTimer)
       }
@@ -279,7 +279,9 @@ Page({
   },
   
   giveUp: function() {
-    this.data.setGiveUp = true
+    this.setData({
+      setGiveUp: true
+    })
     this.pause()
   },
 
@@ -331,9 +333,9 @@ Page({
   },
 
   getFormat: function (currentTime) {
-    var time_all = currentTime / 1000; // 获得倒计时文字总秒数
-    var time_m = (parseInt(time_all / 60) >= 10) ? parseInt(time_all / 60) : ('0' + parseInt(time_all / 60)) // 获得倒计时文字分钟
-    var time_s = (parseInt(time_all % 60) >= 10) ? parseInt(time_all % 60) : '0' + parseInt(time_all % 60); // 获得剩余倒计时秒数
+    let time_all = currentTime / 1000; // 获得倒计时文字总秒数
+    let time_m = (parseInt(time_all / 60) >= 10) ? parseInt(time_all / 60) : ('0' + parseInt(time_all / 60)) // 获得倒计时文字分钟
+    let time_s = (parseInt(time_all % 60) >= 10) ? parseInt(time_all % 60) : '0' + parseInt(time_all % 60); // 获得剩余倒计时秒数
     return time_m + ':' + time_s
   }
 })
