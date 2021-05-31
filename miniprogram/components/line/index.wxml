@@ -21,7 +21,8 @@
     <view wx:if ="{{noData}}">no data</view>
   </view>
   <view style="flex-grow: 1; position: relative">
-    <view class="full-screen-container" style="height: 100%">
+    <view hidden ="{{!noData}}" class="no-data">暂无数据</view>
+    <view hidden ="{{noData}}" class="full-screen-container" style="height: 100%">
       <ec-canvas id="mychart-dom-line" canvas-id="mychart-line" ec="{{ ec }}"></ec-canvas>
     </view>
   </view>

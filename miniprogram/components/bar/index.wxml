@@ -18,10 +18,10 @@
       <button class="{{'button-dwm button-right' + (buttonChecked == buttonYear? ' tap': '')}}"
         bindtap="buttonYearTap">年</button>
     </view>
-    <view wx:if ="{{noData}}">no data</view>
   </view>
   <view style="flex-grow: 1; position: relative">
-    <view class="full-screen-container" style="height: 100%">
+    <view hidden ="{{!noData}}" class="no-data">暂无数据</view>
+    <view hidden ="{{noData}}" class="full-screen-container" style="height: 100%">
       <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
     </view>
   </view>
