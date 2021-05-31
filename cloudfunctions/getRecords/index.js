@@ -8,8 +8,6 @@ exports.main = async (event, context) => {
   // 先取出集合记录总数
   const countResult = await db.collection('records').count()
   const total = countResult.total
-  console.log(countResult)
-  console.log(total)
 
   // 计算需分几次取
   const batchTimes = Math.ceil(total / 100)

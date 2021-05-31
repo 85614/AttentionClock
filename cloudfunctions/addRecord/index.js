@@ -8,6 +8,7 @@ const db = cloud.database()
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
   let newRecord = event.newRecord
+  newRecord._openid = wxContext.OPENID
   await db.collection('records').add({
     data: newRecord,
     success: function(res) {

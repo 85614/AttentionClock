@@ -14,7 +14,7 @@ exports.main = async (event, context) => {
   }).get({
     success: function(res) {
       // res.data 是包含以上定义的两条记录的数组
-      id = res.data[0]._id
+      id = res.data
     }
   })
 
@@ -24,5 +24,7 @@ exports.main = async (event, context) => {
     fail: console.error,
   })
 
-  return {}
+  return {
+    id: id,
+  }
 }
