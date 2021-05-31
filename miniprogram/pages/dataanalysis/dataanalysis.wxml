@@ -1,0 +1,60 @@
+<view class="page" data-weui-theme="{{theme}}" style="background: skyblue">
+
+    <view class="my-page__hd" bindtap="test">
+        <view class="page__title">统计数据</view>
+    </view>
+    <!--index.wxml-->
+
+    <view class="box">
+        <view style="font-size: 0.7em">累积专注</view>
+        <view style="text-align: center; font-size: 0.7em">
+            <view style="width: 50%; display: inline-block">
+                <view> 次数 </view>
+                <view>{{total_count || 0}}</view>
+            </view>
+            <view style="width: 50%; display: inline-block">
+                <view> 时长 </view>
+                <view>{{total_time || 0}}<text style="font-size: 0.3em">分钟</text> </view>
+            </view>
+        </view>
+    </view>
+
+    <view class="box">
+        <view style="flex-grow: 0; font-size: 0.7em; display:flex; flex-direction: row; justify-content: space-between;">
+            <view>当日分布 {{dateStr||"1970-01-01"}}</view>
+            <view>
+                <mp-icon icon="back" size="{{7}}" extClass="my-icon" bindtap="lastDate"></mp-icon>
+                <mp-icon icon="arrow" size="{{9}}" extClass="my-icon" bindtap="nextDate"></mp-icon>
+            </view>
+        </view>
+        <view style="text-align: center; font-size: 0.7em">
+            <view style="width: 50%; display: inline-block">
+                <view> 次数 </view>
+                <view>{{today_count || 0}}</view>
+            </view>
+            <view style="width: 50%; display: inline-block">
+                <view> 时长 </view>
+                <view>{{today_time || 0}}<text style="font-size: 0.3em">分钟</text> </view>
+            </view>
+        </view>
+    </view>
+
+    <view class="box">
+        <view class="chart-box" style="height: 200px">
+            <my-pie id='my-pie'></my-pie>
+        </view>
+    </view>
+    
+    <view class="box">
+        <view class="chart-box" style="height: 200px">
+            <my-bar id='my-bar'></my-bar>
+        </view>
+    </view>
+    
+    <view class="box">
+        <view class="chart-box" style="height: 300px">
+            <my-line id='my-line'></my-line>
+        </view>
+    </view>
+
+</view>

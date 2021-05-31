@@ -1,0 +1,51 @@
+/* pages/timelines/timelines.wxss */
+
+@import '../common.wxss';
+
+.my-page__hd {
+  padding: 5px 5px 3px;
+  color: white;
+  background-color: skyblue;
+
+}
+.active-colort {
+  color: #fff;
+  background: #b8d5eb;
+}
+
+.active-coloro	{
+  color: #fff;
+  background: #188be4;
+}
+
+.body_empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.neck {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px 16px;
+}
+
+.my-cell{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  background: skyblue;
+}
+
+.slideview-button{
+  margin: 5px 0;
+  height: auto;
+}
+
+.textarea {
+  border: 1px solid grey;
+}

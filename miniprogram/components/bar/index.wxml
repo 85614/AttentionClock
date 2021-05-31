@@ -1,0 +1,27 @@
+<!--index.wxml-->
+<view style="position: relative; height: 100%;display: flex;flex-direction: column;">
+  <view style="flex-grow: 0; font-size: 0.7em; display:flex; flex-direction: row; justify-content: space-between;" bindtap="test">
+    <view>工作时间段分布 {{dateStr||"1970-01-01"}}</view>
+    <view>
+      <mp-icon icon="back" size="{{7}}" extClass="my-icon" bindtap="lastDate"></mp-icon>
+      <mp-icon icon="arrow" size="{{9}}" extClass="my-icon" bindtap="nextDate"></mp-icon>
+    </view>
+  </view>
+  <view>
+    <view style="display:flex; flex-direction: row; width: 50%; margin:10px 25%;">
+      <button class="{{'button-dwm button-left' + (buttonChecked == buttonDay? ' tap': '')}}"
+        bindtap="buttonDayTap">日</button>
+      <button class="{{'button-dwm button-mid' + (buttonChecked == buttonWeek? ' tap': '')}}"
+        bindtap="buttonWeekTap">周</button>
+      <button class="{{'button-dwm button-mid' + (buttonChecked == buttonMonth? ' tap': '')}}"
+        bindtap="buttonMonthTap">月</button>
+      <button class="{{'button-dwm button-right' + (buttonChecked == buttonYear? ' tap': '')}}"
+        bindtap="buttonYearTap">年</button>
+    </view>
+  </view>
+  <view style="flex-grow: 1; position: relative">
+    <view class="full-screen-container">
+      <ec-canvas id="mychart-dom-bar" canvas-id="mychart-bar" ec="{{ ec }}"></ec-canvas>
+    </view>
+  </view>
+</view>

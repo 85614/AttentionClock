@@ -4,6 +4,7 @@
 const themeListeners = []
 const oneDayMs = 1000 * 60 *60 *24 // 一天的毫秒数
 let db // 云数据库的引用
+let f1 = 1, f2 = 1
 
 App({
   onLaunch() {
@@ -22,42 +23,25 @@ App({
     db = wx.cloud.database() // 获取数据库的引用
 
     console.log('App Launch')
-    wx.cloud.callFunction({
-      // 云函数名称
-      name: 'getRecords',
-      // 传给云函数的参数
-      data: {
-      },
-    })
-    .then(res => {
-      console.log(res.result.data)
-      this.globalData.record = res.result.data
-    })
-    .catch(console.error)
-    
-    // this.getTasks()
-    wx.cloud.callFunction({
-      // 云函数名称
-      name: 'getTasks',
-      // 传给云函数的参数
-      data: {
-      },
-    })
-    .then(res => {
-      console.log(res.result.data)
-      this.globalData.tasks = res.result.data
-    })
-    .catch(console.error)
-
+  
     this.AddFormatToDate()
-    // this.test()
     // console.log("lg")
-    this.testRecord()
-    // console.log("fuck")
+    
   },
 
   onShow: function () {
     console.log('App Show')
+    // wx.showLoading({
+    //   title: '加载中',
+    // })
+
+    // this.initData().then(res => {
+    //   this.testRecord()
+    //   wx.hideLoading({
+    //     success: (res) => {},
+    //   })
+
+    // })
     
   },
   onHide: function () {
@@ -124,6 +108,48 @@ App({
 
   },
 
+  // 初始化
+  async initData() {
+
+    await wx.cloud.callFunction({
+      // 云函数名称
+      name: 'getRecords',
+      // 传给云函数的参数
+      data: {
+      },
+    })
+    .then(res => {
+      console.log("init records:", res.result.data)
+      this.globalData.record = res.result.data
+    })
+    .catch(console.error)
+    
+    // this.getTasks()
+    await wx.cloud.callFunction({
+      // 云函数名称
+      name: 'getTasks',
+      // 传给云函数的参数
+      data: {
+      },
+    })
+    .then(res => {
+      console.log("init tasks: ", res.result.data)
+      if (res.result.data.length > 0) { // 初次使用
+        const tasks = this.globalData.tasks
+        for (let i = 0; i < tasks.length; i++) {
+          this.addTask(tasks[i])
+        }
+      }
+      else { // 非初次使用
+        this.globalData.tasks = []
+      }
+      this.globalData.tasks = res.result.data.concat(this.globalData.tasks)
+      
+    })
+    .catch(console.error)
+
+  },
+
 
   deepCopy(e) {
     return e
@@ -163,93 +189,146 @@ App({
 
   setRecord(id, r) { // 待测
     // 把id为id的record
+    
+    const _this = this
+    // wx.cloud.callFunction({
+    //   // 云函数名称
+    //   name: 'modifyRecord',
+    //   // 传给云函数的参数
+    //   data: {
+    //     newRecord: r,
+    //   },
+    // })
+    // .then(res => {
+    //   console.log("return id :", res)
+    // })
+    // .catch(console.error)
+    const newRecord = r
+
+    db.collection('records').where({
+      recordID: newRecord.recordID,
+    }).get({
+      success: function(res) {
+        // res.data 是包含以上定义的两条记录的数组
+        id = res.data[0]._id
+        console.log("target record: ", newRecord.recordID)
+        console.log("_id: ", id)
+        // newRecord.set = 1
+        db.collection('records').doc(id).set({
+          data: newRecord,
+          success: function(res) {
+            console.log("set:", res)
+          },
+          fail: console.error,
+        })
+      }
+    })
+
     const record = this.globalData.record
     for (let i = 0; i < record.length; ++i) {
       if (record[i].recordID === id){
         record[i] = r
       }
     }
-    const _this = this
-    wx.cloud.callFunction({
-      // 云函数名称
-      name: 'modifyRecord',
-      // 传给云函数的参数
-      data: {
-        newRecord: r,
-      },
-    })
-    .then(res => {
-    })
-    .catch(console.error)
-
+  
+    
   },
 
   setTaskById(id, t) {  // 待测
-    console.log('set task ', id, 'from', this.globalData.tasks[id], 'to', t)
+    // console.log('set task ', id, 'from', this.globalData.tasks[id], 'to', t)
     t.valid = 1
-    Object.assign(this.globalData.tasks[id], t)
+    // Object.assign(this.globalData.tasks[id], t)
     const _this = this
-    wx.cloud.callFunction({
-      // 云函数名称
-      name: 'modifyTask',
-      // 传给云函数的参数
-      data: {
-        newTask: _this.deepCopy(t),
-      },
+    // wx.cloud.callFunction({
+    //   // 云函数名称
+    //   name: 'modifyTask',
+    //   // 传给云函数的参数
+    //   data: {
+    //     newTask: _this.deepCopy(t),
+    //   },
+    // })
+    // .then(res => {
+    //   console.log(res.result.data)
+    // })
+    // .catch(console.error)
+    db.collection('records').where({
+      id: newTasks.id,
+    }).get({
+      success: function(res) {
+        id = res.data[0]._id
+        db.collection('records').doc(id).set({
+          data: newTasks,
+          success: function(res) {},
+          fail: console.error,
+        })
+      }
     })
-    .then(res => {
-      console.log(res.result.data)
-    })
-    .catch(console.error)
+
+    const tasks = this.globalData.tasks
+    for (let i = 0; i < tasks.length; ++i) {
+      if (tasks[i].id === id){
+        tasks[i] = t
+      }
+    }
   },
 
   addTask(t){  // 待测
     console.log('add task ', this.globalData.tasks.length, t)
     t.valid = 1
     const _this = this
-    wx.cloud.callFunction({
-      // 云函数名称
-      name: 'addTask',
-      // 传给云函数的参数
-      data: {
-        newTask: _this.deepCopy(t),
+    // wx.cloud.callFunction({
+    //   // 云函数名称
+    //   name: 'addTask',
+    //   // 传给云函数的参数
+    //   data: {
+    //     newTask: _this.deepCopy(t),
+    //   },
+    // })
+    // .then(res => {
+    //   console.log(res.result.data)
+    //   _this.globalData.tasks.push(res.result.data)
+    //   Object.assign(t, res.result.data )
+    // })
+    // .catch(console.error)
+
+    db.collection('tasks').add({
+      data: t,
+      success: function(res) {
+        console.log("new task: ", res.data)
       },
+      fail: console.error,
+      complete: console.log
     })
-    .then(res => {
-      console.log(res.result.data)
-      _this.globalData.tasks.push(res.result.data)
-      Object.assign(t, res.result.data )
-    })
-    .catch(console.error)
+    _this.globalData.tasks.push(t)
   },
 
   addRecord(record) { // 待测
     // 添加一条记录
     const _this = this
-    _this.globalData.record.push(record)
-    wx.cloud.callFunction({
-      // 云函数名称
-      name: 'addRecord',
-      // 传给云函数的参数
-      data: {
-        newRecord: _this.deepCopy(record),
-      },
-    })
-    .then(res => {
-    })
-    .catch(console.error)
-    // db.collection('records').add({
-    //   data: newRecord,
-    //   success: function(res) {
-    //     console.log(newRecord)
-    //     newRecord = res.data
-    //      _this.globalData.record.push(res.result.data)
-    //     Object.assign(record, res.result.data )
+    
+    // wx.cloud.callFunction({
+    //   // 云函数名称
+    //   name: 'addRecord',
+    //   // 传给云函数的参数
+    //   data: {
+    //     newRecord: _this.deepCopy(record),
     //   },
-    //   fail: console.error,
-    //   complete: console.log
     // })
-
+    // .then(res => {
+    // })
+    // .catch(console.error)
+    db.collection('records').add({
+      data: record,
+      success: function(res) {
+        console.log("new record: ", res)
+        // newRecord = res.data
+        //  _this.globalData.record.push(res.result.data)
+        // Object.assign(record, res.result.data )
+      },
+      fail: console.error,
+      complete: console.log
+    })
+    _this.globalData.record.push(record)
   },
 
   deleteRecord(id) { // 待测
@@ -257,44 +336,76 @@ App({
     const record = this.globalData.record
     const _this = this
     console.log(id)
+    
+    // wx.cloud.callFunction({
+    //   // 云函数名称
+    //   name: 'delRecord',
+    //   // 传给云函数的参数
+    //   data: {
+    //     id: id,
+    //   },
+    // })
+    // .then(res => {
+      
+    // })
+    // .catch(console.error)
+    db.collection('records').where({
+      recordID: id,
+    }).remove({
+      success: function(res) {
+        console.log("remove res:", res)
+      },
+      fail: console.error,
+    })
     for (let i = 0; i < record.length; ++i) {
       if (record[i].recordID == id){
         record.splice(i, 1)
         console.log("you have delete record", i)
       }
     }
-    wx.cloud.callFunction({
-      // 云函数名称
-      name: 'delRecord',
-      // 传给云函数的参数
-      data: {
-        id: id,
-      },
-    })
-    .then(res => {
-      
-    })
-    .catch(console.error)
-
   },
 
   deleteTaskById(id) { // 待测
-    for (let i = 0; i < this.globalData.tasks.length; i++) {
-      this.globalData.tasks[i].valid = 0
-    }
+    
     const _this = this
-    wx.cloud.callFunction({
-      // 云函数名称
-      name: 'modifyTask',
-      // 传给云函数的参数
-      data: {
-        newTask: _this.deepCopy(this.globalData.tasks[i]),
-      },
+    // wx.cloud.callFunction({
+    //   // 云函数名称
+    //   name: 'modifyTask',
+    //   // 传给云函数的参数
+    //   data: {
+    //     newTask: _this.deepCopy(this.globalData.tasks[i]),
+    //   },
+    // })
+    // .then(res => {
+    //   console.log(res.result.data)
+    // })
+    // .catch(console.error)
+    let _id
+    let newTask
+    for (let i = 0; i < this.globalData.tasks.length; i++) {
+      if(this.globalData.tasks[i].id === id) {
+        this.globalData.tasks[i].valid = 0
+        newTask = this.globalData.tasks[i]
+      }
+    }
+    
+    db.collection('tasks').where({
+      id: id,
+    }).get({
+      success: function(res) {
+        // res.data 是包含以上定义的两条记录的数组
+        console.log("search _id: ", res.data)
+        newTask._id = res.data[0]._id
+        db.collection('tasks').doc(_id).set({
+          data: newTask,
+          success: function(res) {
+            console.log("add record:", res)
+          },
+          fail: console.error,
+        })
+      }
     })
-    .then(res => {
-      console.log(res.result.data)
-    })
-    .catch(console.error)
+    
   },
 
   getNextRecordId() { 
@@ -302,7 +413,7 @@ App({
   },
 
   getNextTaskId(){ 
-    return Date.now()
+    return this.globalData.tasks.length + 1
   },
 
 testRecord() {
@@ -322,17 +433,24 @@ testRecord() {
   }
 
   this.addRecord(r1)
-  this.addRecord(r2)
+  // this.addRecord(r2)
   this.addRecord(r3)
-  console.log(this.getRecords())
+  
+  console.log("after add: ",this.getRecords())
+  setTimeout(() => {
+    
+  }, 2000)
   
   this.deleteRecord(r3.recordID)
-  this.deleteRecord(r2.recordID)
-  console.log(this.getRecords())
+  // this.deleteRecord(r2.recordID)
+  console.log("after delete:", this.getRecords())
+  setTimeout(() => {
+    
+  }, 2000)
 
   r1.order = 666
   this.setRecord(r1.recordID, r1)
-  console.log(this.getRecords())
+  console.log("after set:", this.getRecords())
 },
 
 
@@ -407,6 +525,7 @@ testRecord() {
   getRecordTimeRange(d_start, d_end) {
     // console.log(d_start, "到", d_end, "的所有记录")
     const record = this.globalData.record
+    console.log("fucking record:", record)
     const ms_start = d_start.getTime()
     const ms_end = d_end.getTime()
     let ans = []
@@ -419,20 +538,29 @@ testRecord() {
       this.addRecordForTest(ms_start, ms_end)
       return this.getRecordTimeRange(d_start, d_end)
     }
+    console.log("fucking ans; ", ans)
     return ans
   },
   addRecordForTest(ms_start, ms_end) {
     const n = 10;
     for (let i = 0; i < n; ++i) {
       this.addRecord({
-        taskID: i % this.globalData.tasks.length,
-        recordID: this.globalData.recordID++,
+        taskID: this.randomID(),
+        recordID: this.getNextRecordId(),
         startTime: ms_start + i * parseInt((ms_end-ms_start) / n),
         isFinish: i == 0 ? 0 : 1,
         exitTime: i,  // ms
         durationTime: parseInt((ms_end-ms_start) / n), // ms
       })
     }
+  },
+
+  randomID() {
+    let ri = Math.floor(Math.random()) % this.globalData.tasks.length
+    while(this.globalData.tasks[ri].valid === 0) {
+      ri = Math.floor(Math.random()) % this.globalData.tasks.length
+    }
+    return this.globalData.tasks[ri].id
   },
 
   AddFormatToDate(){
@@ -596,9 +724,12 @@ testRecord() {
 
   get_formated_record(r) {
     // 获取信息是字符串的记录
+    console.log("taskID: ", r)
+    // console.log()
+    console.log("testing: ", this.getTaskById(r.taskID))
     return Object.assign({}, r ,{
       id: r.recordID,
-      taskName: this.globalData.tasks[r.taskID].name,
+      taskName: this.getTaskById(r.taskID).name,
       taskStartTime: new Date(r.startTime).format("yyyy-MM-dd hh:mm"),
       taskEndTime: new Date(r.startTime + r.durationTime).format("yyyy-MM-dd hh:mm"),
       taskTime: parseInt(r.durationTime / 1000 / 60),
@@ -617,7 +748,23 @@ testRecord() {
       exitTime: r.exitTime || 0,  // ms
       durationTime: r.taskTime * 1000 * 60,
     })
-  }
-
+  },
+  getSomeDayDayDistribution(ms) {
+    // 获取一个月 一天内每个时间段的工作事件
+    return this.getDayDistribution(...this.getDayRangeMS(ms))
+  },
+     getSomeWeekDistribution(ms){
+          // 获取一周内每天的工作时间
+          const monthData = this.getRecordTimeRange(...this.getWeekRangeMS(ms))
+          let ans = []
+          for (let i = 0; i < monthData.length; ++i){
+            const x = monthData[i]
+            const d = new Date(x.startTime).getDay()
+            ans[d] = ans[d] || 0
+            ans[d] += parseInt(x.durationTime / 1000 / 60)
+          }
+          // console.log('月分布', ans)
+          return ans
+        },
 
 })

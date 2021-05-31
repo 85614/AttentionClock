@@ -1,0 +1,54 @@
+@import '../common.wxss';
+
+.my-cell{
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin: 5px;
+  border-radius: 5px;
+  background: skyblue;
+}
+.slideview-button{
+  margin: 5px 0;
+  height: auto;
+}
+
+
+.my-page__hd {
+  padding: 5px 5px 3px;
+  color: white;
+
+}
+
+.my-dialog { margin:0}
+
+ec-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.box {
+  margin: 5px 5px 5px;
+  padding: 8px;
+  border-radius: 2px;
+  background: white;
+}
+
+.chart-box{
+  position: relative;
+  width: 100%;
+  min-height: 100px;
+  
+}
+.filling-in-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+} 
