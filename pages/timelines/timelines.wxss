@@ -1,5 +1,13 @@
 /* pages/timelines/timelines.wxss */
 
+@import '../common.wxss';
+
+.my-page__hd {
+  padding: 5px 5px 3px;
+  color: white;
+  background-color: skyblue;
+
+}
 .active-colort {
   color: #fff;
   background: #b8d5eb;

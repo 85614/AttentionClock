@@ -1,4 +1,7 @@
 <!--pages/timelines/timelines.wxml-->
+<view class="my-page__hd" bindtap="test">
+        <view class="page__title">详细历史记录</view>
+    </view>
 <view class="header">
   <calendar 
     cur-year="{{curYear}}"
