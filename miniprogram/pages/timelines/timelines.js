@@ -74,16 +74,15 @@ Page({
     const todayRecord = app.getOneDayAllRecordMS(Date.now())
     const taskRecords = []
     const taskArry = []
-    console.log("begin")
     for (let i = 0; i < todayRecord.length; ++i){
       console.log(app.get_formated_record(todayRecord[i]))
       taskRecords.push(app.get_formated_record(todayRecord[i]))
-      console.log("onshowing")
     }
     for(let i = 0; i < app.getTasks().length; i++) {
       taskArry.push(app.getTasks()[i].name)
     }
     this.setData({
+      hasData: taskRecords != 0,
       taskRecords: taskRecords,
       taskArry: taskArry,
       newDate: new Date().format("yyyy-MM-dd")

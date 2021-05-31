@@ -19,53 +19,39 @@ CustomPage({
     }
   },
   onLoad: function () {
-
-    wx.showLoading({
-      title: '加载中',
+    this.setData({
+      dialogAgentAddShow: false,      
+      dialogButtons: [{
+        text: '取消'
+      }, {
+        text: '确定',
+        value: true
+      }],
+      dialogButtonsDetail: [{
+        text: '确定',
+      }],
+      // icon: base64.icon20,
+      moreOptions: [{
+        text: '详情',
+        src: '/pages/cell/icon_love.svg', // icon的路径
+        action: this.TaskDetail,
+        extClass: 'slideview-button'
+      }, {
+        text: '编辑',
+        extClass: 'test',
+        src: '/pages/cell/icon_star.svg', // icon的路径
+        action: this.editTask,
+        extClass: 'slideview-button'
+      }, {
+        type: 'warn',
+        text: '删除',
+        extClass: 'test',
+        src: '/pages/cell/icon_del.svg', // icon的路径
+        action: this.deleteTask,
+        extClass: 'slideview-button'
+      }],
+      tasks: app.getTasks()
     })
-
-    app.initData().then(res => {
-
-      this.setData({
-        dialogAgentAddShow: false,      
-        dialogButtons: [{
-          text: '取消'
-        }, {
-          text: '确定',
-          value: true
-        }],
-        dialogButtonsDetail: [{
-          text: '确定',
-        }],
-        // icon: base64.icon20,
-        moreOptions: [{
-          text: '详情',
-          src: '/pages/cell/icon_love.svg', // icon的路径
-          action: this.TaskDetail,
-          extClass: 'slideview-button'
-        }, {
-          text: '编辑',
-          extClass: 'test',
-          src: '/pages/cell/icon_star.svg', // icon的路径
-          action: this.editTask,
-          extClass: 'slideview-button'
-        }, {
-          type: 'warn',
-          text: '删除',
-          extClass: 'test',
-          src: '/pages/cell/icon_del.svg', // icon的路径
-          action: this.deleteTask,
-          extClass: 'slideview-button'
-        }],
-        tasks: app.getTasks()
-      })
-
-      wx.hideLoading({
-        success: (res) => {},
-      })
-
-    })
-
     this.updateTasks()
   },
   slideButtonTap(e) {

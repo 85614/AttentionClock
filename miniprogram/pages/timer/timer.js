@@ -43,7 +43,7 @@ Page({
     // 系统设备信息
     let res = wx.getSystemInfoSync()
     let rate = 750 / res.windowWidth
-
+    this.data.id = option.id
     this.data.time = app.getTaskById(parseInt(option.id)).minutes
 
     this.setData({    
@@ -83,16 +83,16 @@ Page({
     // })
 
     // 如果失败，则存储记录
-    if (!_this.data.okShow) {
-      app.addRecord({
-        taskID: _this.data.id,
-        recordID: app.getNextRecordId(),
-        startTime: _this.data.startTime,  // format time
-        isFinish: 0,
-        exitTime: _this.data.totalExitTime,  // ms
-        durationTime: _this.data.mTime, // ms
-      })
-    }
+    // if (!_this.data.okShow) {
+    //   app.addRecord({
+    //     taskID: _this.data.id,
+    //     recordID: app.getNextRecordId(),
+    //     startTime: _this.data.startTime,  // format time
+    //     isFinish: 0,
+    //     exitTime: _this.data.totalExitTime,  // ms
+    //     durationTime: _this.data.mTime, // ms
+    //   })
+    // }
 
     clearInterval(this.data.timer)
     clearInterval(this.data.exitTimer)
@@ -161,6 +161,7 @@ Page({
         ctx.stroke()
         ctx.draw()
       } else {
+        clearInterval(timer)
         // 将完成的数据记录到日志
         // let logs = wx.getStorageSync('logs') || []
         let ctx = wx.createCanvasContext('progress-active')
@@ -180,10 +181,19 @@ Page({
           totExitTimeStr: this.getFormat(this.data.totalExitTime),
         })
 
+        console.log('添加记录', app.get_formated_record({
+          taskID: _this.data.id,
+          recordID: app.getNextRecordId(),
+          startTime: _this.data.startTime,  // format time
+          isFinish: 1,
+          exitTime: _this.data.totalExitTime,  // ms
+          durationTime: _this.data.mTime, // ms
+        }))
+
         // 存储成功记录
         app.addRecord({
           taskID: _this.data.id,
-          recordID: (app.recordID)++,
+          recordID: app.getNextRecordId(),
           startTime: _this.data.startTime,  // format time
           isFinish: 1,
           exitTime: _this.data.totalExitTime,  // ms
@@ -191,7 +201,7 @@ Page({
         })
 
 
-        clearInterval(timer)
+        
       }
     }, timestep)
     // 暴露计时器，供其他函数调用 
@@ -259,6 +269,26 @@ Page({
           fail: true,
           totExitTimeStr: this.getFormat(this.data.totalExitTime),
         })
+        
+        
+        console.log('添加记录', app.get_formated_record({
+          taskID: _this.data.id,
+          recordID: app.getNextRecordId(),
+          startTime: _this.data.startTime,  // format time
+          isFinish: 1,
+          exitTime: _this.data.totalExitTime,  // ms
+          durationTime: _this.data.mTime, // ms
+        }))
+        app.addRecord({
+          taskID: _this.data.id,
+          recordID: app.getNextRecordId(),
+          startTime: _this.data.startTime,  // format time
+          isFinish: 0,
+          exitTime: _this.data.totalExitTime,  // ms
+          durationTime: _this.data.mTime, // ms
+        })
+      
+
         // 将失败的数据记录到日志
         // let logs = wx.getStorageSync('logs') || [];
         // logs.unshift({

@@ -58,10 +58,6 @@ CustomPage({
       today_count += records[i] ? records[i].count : 0
       today_time += records[i] ? records[i].total_time : 0
     }
-    for (let i = 0; i < records.length; ++i) {
-      today_count += records[i] ? records[i].count : 0
-      today_time += records[i] ? records[i].total_time : 0
-    }
     this.setData({
       total_time: app.get_finished_total_time(),
       total_count: app.get_finished_count(),
