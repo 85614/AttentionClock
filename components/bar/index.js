@@ -104,7 +104,7 @@ const optionMaker = function() {
     ],
     series: [
       {
-        name: '热度',
+        name: '时间',
         type: 'bar',
         label: {
           // normal: {

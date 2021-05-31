@@ -11,7 +11,7 @@
   </view>
 
   <!-- 失败页面 -->
-  <view class="progress1" wx:if="{{fail}}">
+  <view class="progress1" wx:if="{{okShow && fail}}">
       <view class="progress-text1" style="height:auto;">离开时间超过限制！</view>
       <view class="progress-text1" style="height:auto;">任务失败！</view>
   </view>
@@ -24,7 +24,7 @@
   </view>
 
   <!-- 按钮 -->
-  <view class="btns" style="margin-top: 230rpx;">
+  <view class="btns">
     <view class="okBtn" bindtap="ok" wx:if="{{okShow}}" bindtap="cancel">返回</view>
 
     <view class="pauseBtn" bindtap="pause" wx:if="{{pauseShow}}" bindtap="pause">暂停</view>

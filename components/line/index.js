@@ -139,7 +139,7 @@ const optionMaker = function() {
       // show: false
     },
     series: [{
-      name: 'A',
+      name: '时间',
       type: 'line',
       smooth: true,
       data: [18, 36, 65, 30, 78, 40, 33]

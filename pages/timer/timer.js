@@ -237,7 +237,8 @@ Page({
     var currentTime = parseInt(this.data.setGiveUp ? 0 : this.data.exitTime) * 60 * 1000
     this.data.setGiveUp = false
     var timestep = _this.data.timestep
-    var timer = setInterval(() => {
+    var timer
+    this.data.exitTimer = timer = setInterval(() => {
       currentTime = currentTime - timestep // 倒计时文字
       _this.data.totalExitTime += timestep
       // var step = _this.data.mTime / (_this.data.time * 60 * 1000) * 2 * Math.PI + 1.5 * Math.PI
@@ -268,12 +269,12 @@ Page({
         // console.log(logs); 
         wx.setStorageSync('logs', logs) // 把数据加到缓存
 
-        clearInterval(exitTimer)
+        clearInterval(this.data.exitTimer)
       }
     }, timestep);
-    _this.setData({
-      exitTimer: timer,
-    })
+    // _this.setData({
+    //   exitTimer: timer,
+    // })
 
   },
   
