@@ -2,6 +2,7 @@
 const cloud = require('wx-server-sdk')
 
 cloud.init()
+const db = cloud.database()
 
 // 云函数入口函数
 exports.main = async (event, context) => {
@@ -10,13 +11,12 @@ exports.main = async (event, context) => {
   await db.collection('records').add({
     data: newRecord,
     success: function(res) {
-      newRecord = res.data
+
     },
     fail: console.error,
     complete: console.log
   })
 
   return {
-    data: newRecord,
   }
 }

@@ -7,7 +7,6 @@ let db // 云数据库的引用
 
 App({
   onLaunch() {
-    const _this = this
     if (!wx.cloud) {
       console.error('请使用 2.2.3 或以上的基础库以使用云能力')
     } else {
@@ -23,7 +22,6 @@ App({
     db = wx.cloud.database() // 获取数据库的引用
 
     console.log('App Launch')
-    // this.getRecords()
     wx.cloud.callFunction({
       // 云函数名称
       name: 'getRecords',
@@ -33,7 +31,7 @@ App({
     })
     .then(res => {
       console.log(res.result.data)
-      this.globalData.taks = res.result.data
+      this.globalData.record = res.result.data
     })
     .catch(console.error)
     
@@ -47,14 +45,15 @@ App({
     })
     .then(res => {
       console.log(res.result.data)
-      this.globalData.taks = res.result.data
+      this.globalData.tasks = res.result.data
     })
     .catch(console.error)
 
     this.AddFormatToDate()
-    this.test()
-    console.log("lg")
-    // this.taskRecord()
+    // this.test()
+    // console.log("lg")
+    this.testRecord()
+    // console.log("fuck")
   },
 
   onShow: function () {
@@ -123,8 +122,8 @@ App({
       }
     ],
 
-    recordID: 0
   },
+
 
   deepCopy(e) {
     return e
@@ -140,7 +139,7 @@ App({
   },
 
   getRecords() { // 从数据库中获取全部
-    this.globalData.records
+    return this.globalData.record
   },
 
   getTaskById(id) { 
@@ -166,7 +165,7 @@ App({
     // 把id为id的record
     const record = this.globalData.record
     for (let i = 0; i < record.length; ++i) {
-      if (record[i].recordID == id){
+      if (record[i].recordID === id){
         record[i] = r
       }
     }
@@ -176,12 +175,10 @@ App({
       name: 'modifyRecord',
       // 传给云函数的参数
       data: {
-        newRecord: _this.deepCopy(r),
+        newRecord: r,
       },
     })
     .then(res => {
-      console.log(res.result.data)
-      Object.assign()
     })
     .catch(console.error)
 
@@ -229,6 +226,7 @@ App({
   addRecord(record) { // 待测
     // 添加一条记录
     const _this = this
+    _this.globalData.record.push(record)
     wx.cloud.callFunction({
       // 云函数名称
       name: 'addRecord',
@@ -238,21 +236,29 @@ App({
       },
     })
     .then(res => {
-      console.log(res.result.data)
-      _this.globalData.record.push(res.result.data)
-      Object.assign(t, res.result.data )
     })
     .catch(console.error)
+    // db.collection('records').add({
+    //   data: newRecord,
+    //   success: function(res) {
+    //     console.log(newRecord)
+    //     newRecord = res.data
+    //      _this.globalData.record.push(res.result.data)
+    //     Object.assign(record, res.result.data )
+    //   },
+    //   fail: console.error,
+    //   complete: console.log
+    // })
+
   },
 
   deleteRecord(id) { // 待测
     // 删除record
     const record = this.globalData.record
-    let ID
     const _this = this
+    console.log(id)
     for (let i = 0; i < record.length; ++i) {
       if (record[i].recordID == id){
-        ID = record[i]._id
         record.splice(i, 1)
         console.log("you have delete record", i)
       }
@@ -262,7 +268,7 @@ App({
       name: 'delRecord',
       // 传给云函数的参数
       data: {
-        _id: ID
+        id: id,
       },
     })
     .then(res => {
@@ -273,7 +279,6 @@ App({
   },
 
   deleteTaskById(id) { // 待测
-    console.log('delete task ', id, this.globalData.tasks[id])
     for (let i = 0; i < this.globalData.tasks.length; i++) {
       this.globalData.tasks[i].valid = 0
     }
@@ -300,34 +305,33 @@ App({
     return Date.now()
   },
 
-taskRecord() {
+testRecord() {
   let r1 = {
-    id: this.getNextRecordId() - 1,
+    recordID: this.getNextRecordId() - 1,
     order: 1,
   }
 
   let r2 = {
-    id: this.getNextRecordId() + 1,
+    recordID: this.getNextRecordId() + 1,
     order: 2,
   }
 
   let r3 = {
-    id: this.getNextRecordId() + 10,
+    recordID: this.getNextRecordId() + 10,
     order: 3,
   }
 
-
-  r1 = this.addRecord(r1)
-  r2 = this.addRecord(r2)
-  r3 = this.addRecord(r3)
+  this.addRecord(r1)
+  this.addRecord(r2)
+  this.addRecord(r3)
   console.log(this.getRecords())
-
-  this.deleteRecord(r3.id)
-  this.deleteRecord(r2.id)
+  
+  this.deleteRecord(r3.recordID)
+  this.deleteRecord(r2.recordID)
   console.log(this.getRecords())
 
   r1.order = 666
-  this.setRecord(r1.id, r1)
+  this.setRecord(r1.recordID, r1)
   console.log(this.getRecords())
 },
 
