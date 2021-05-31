@@ -261,7 +261,7 @@ Page({
           })
         }
       } else { // 离开时间超出限制
-        
+        clearInterval(this.data.exitTimer)
         _this.setData({
           okShow: true,
           pauseShow: false,
@@ -275,7 +275,7 @@ Page({
           taskID: _this.data.id,
           recordID: app.getNextRecordId(),
           startTime: _this.data.startTime,  // format time
-          isFinish: 1,
+          isFinish: 0,
           exitTime: _this.data.totalExitTime,  // ms
           durationTime: _this.data.mTime, // ms
         }))
@@ -299,7 +299,7 @@ Page({
         // // console.log(logs); 
         // wx.setStorageSync('logs', logs) // 把数据加到缓存
 
-        clearInterval(this.data.exitTimer)
+
       }
     }, timestep);
     // _this.setData({

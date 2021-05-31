@@ -45,7 +45,7 @@ const YearState = {
     return app.getSomeYearDistribution(d.getTime())
   },
   xAxisLabel: function(d, i) {
-    return d.getFullYear() + "-" + i
+    return d.getFullYear() + "-" + (i + 1)
   }
 }
 
