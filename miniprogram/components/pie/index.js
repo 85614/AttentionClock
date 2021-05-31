@@ -56,73 +56,8 @@ const YearState = {
 
 let curState = dayState
 
-const optionMaker = function() {
-  
-  let option = {
-    backgroundColor: "#ffffff",
-    series: [{
-      label: {
-        normal: {
-          fontSize: 7
-        }
-      },
-      type: 'pie',
-      center: ['50%', '50%'],
-      radius: ['20%', '40%'],
-      data: [{
-        value: 55,
-        name: '北京'
-      }, {
-        value: 20,
-        name: '武汉'
-      }, {
-        value: 10,
-        name: '杭州'
-      }, {
-        value: 20,
-        name: '广州'
-      }, {
-        value: 38,
-        name: '上海'
-      }]
-    }]
-  };
-  const records = curState.getRecords(curDate)
-  const data = []
-  for (let i = 0; i < records.length; ++i) {
-    if (records[i]) {
-      // console.log("records[i]", records[i])
-      data.push({
-        name: app.getTaskById(records[i].taskID).name,
-        value: records[i].total_time
-      })
-    }
-  }
-  option.series[0].data = data
-  return option
-}
 
-function initChart(canvas, width, height, dpr) {
-  chart = echarts.init(canvas, null, {
-    width: width,
-    height: height,
-    devicePixelRatio: dpr // new
-  });
-  canvas.setChart(chart);
-
-  const option = optionMaker()
-  chart.setOption(option);
-  return chart;
-}
-
-const resetChart = () => {
-  if (chart) {
-    chart.setOption(optionMaker())
-  }
-  console.log('pie reset chart')
-}
-
-Page({
+Component({
   onShareAppMessage: function (res) {
     return {
       title: 'ECharts 可以在微信小程序中使用啦！',
@@ -133,7 +68,8 @@ Page({
   },
   data: {
     ec: {
-      onInit: initChart
+      lazyLoad: true,
+      // onInit: initChart
     },
     dateStr: curDate.format("yyyy年MM月dd日"),
     buttonDay: 0,
@@ -141,16 +77,42 @@ Page({
     buttonMonth: 2,
     buttonYear: 3,
     buttonChecked: 0,
-    resetDataFun: resetChart
   },
+  lifetimes: {
+    attached: function(){
+      this.selectComponent('#mychart-dom-pie').init((canvas, width, height, dpr) => {
+        // 获取组件的 canvas、width、height 后的回调函数
+        // 在这里初始化图表
+        const chart = echarts.init(canvas, null, {
+          width: width,
+          height: height,
+          devicePixelRatio: dpr // new
+        });
 
+        // 将图表实例绑定到 this 上，可以在其他成员函数（如 dispose）中访问
+        this.data.chart = chart;
+        this.data.chart.setOption(this.optionMaker())
+
+        // 注意这里一定要返回 chart 实例，否则会影响事件处理等
+        return chart;
+      });
+    }
+  },
+  pageLifetimes: {
+    show: function() {
+      // 页面被展示
+      this.resetData()
+    },
+  },
+methods:{
 
   // 根据新的状态重置数据
   resetData(){
     this.setData({
       dateStr: curDate.format("yyyy年MM月dd日"),
     })
-    chart.setOption(optionMaker())
+    if (this.data.chart)
+      this.data.chart.setOption(this.optionMaker())
   },
 
   test(){
@@ -206,5 +168,54 @@ Page({
   nextDate(){
     curState.forward(curDate)
     this.resetData()
+  },
+  optionMaker() {
+  
+    let option = {
+      backgroundColor: "#ffffff",
+      series: [{
+        label: {
+          normal: {
+            fontSize: 7
+          }
+        },
+        type: 'pie',
+        center: ['50%', '50%'],
+        radius: ['20%', '40%'],
+        data: [{
+          value: 55,
+          name: '北京'
+        }, {
+          value: 20,
+          name: '武汉'
+        }, {
+          value: 10,
+          name: '杭州'
+        }, {
+          value: 20,
+          name: '广州'
+        }, {
+          value: 38,
+          name: '上海'
+        }]
+      }]
+    };
+    const records = curState.getRecords(curDate)
+    const data = []
+    for (let i = 0; i < records.length; ++i) {
+      if (records[i]) {
+        // console.log("records[i]", records[i])
+        data.push({
+          name: app.getTaskById(records[i].taskID).name,
+          value: records[i].total_time
+        })
+      }
+    }
+    this.setData({
+      noData: data.length === 0
+    })
+    option.series[0].data = data
+    return option
   }
+}
 });

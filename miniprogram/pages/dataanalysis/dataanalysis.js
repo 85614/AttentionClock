@@ -40,12 +40,6 @@ CustomPage({
       total_count: app.get_finished_count(),
     })
     this.updateSomeDayData()
-    const my_pie = this.selectComponent('#my-pie')
-    const my_bar = this.selectComponent('#my-bar')
-    const my_line = this.selectComponent('#my-line')
-    my_pie.data.resetDataFun()
-    my_bar.data.resetDataFun()
-    my_line.data.resetDataFun()
   },
 
 
