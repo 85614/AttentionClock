@@ -4,7 +4,5 @@
     "my-pie": "../../components/pie/index",
     "my-line": "../../components/line/index",
     "mp-icon": "weui-miniprogram/icon/icon"
-  },
-  
-  "navigationBarTitleText": ""
+  }
 }

@@ -26,7 +26,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Weixin",
+    "navigationBarTitleText": "番茄时钟",
     "navigationBarTextStyle": "black"
   },
   "style": "v2",
