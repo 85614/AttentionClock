@@ -7,8 +7,21 @@ App({
   onLaunch() {
     console.log('App Launch')
     this.AddFormatToDate()
-    this.test()
+    // this.test()
     this.addRecordsForTest()
+    wx.login({
+      success: res => {
+        // 发送 res.code 到后台换取 openId, sessionKey, unionId
+        console.log('log res', res)
+        wx.showToast({
+          title: '已登录',
+        })
+        // wx.showModal({
+        //   title: '提示',
+        //   content: 'lon in res: { errMsg: ' + res.errMsg + ', code: ' + res.code + '}',
+        // })
+      }
+    })
   },
   onShow: function () {
     console.log('App Show')
@@ -72,7 +85,7 @@ App({
       }
     ],
 
-    recordID: 0
+    // recordID: 0
   },
 
   getTasks() { // 待完善
