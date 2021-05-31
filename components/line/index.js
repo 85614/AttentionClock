@@ -30,7 +30,7 @@ const MonthState = {
     return app.getSomeMonthDistribution(d.getTime())
   },
   xAxisLabel: function(d, i) {
-    return d.getMonth() + "-" + i
+    return (d.getMonth() + 1) + "-" + i
   }
 }
 
