@@ -104,7 +104,7 @@ CustomPage({
     const t = {
       id: app.getNextTaskId(),
       name: this.data.newTaskName,
-      minutes: this.data.newTaskTime,
+      minutes: parseInt(this.data.newTaskTime),
       valid: true
     }
     this.data.tasks.unshift(t)

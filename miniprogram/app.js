@@ -56,20 +56,26 @@ App({
     iconTabbar: '/example/images/icon_tabbar.png',
     tasks: [{
         id: 0,
-        name: "待办是您要专注的事",
-        minutes: 1,
-      }, {
-        id: 1,
-        name: "右上角 + 号添加待办",
-        minutes: 10,
-      }, {
-        id: 2,
-        name: "左滑待办编辑或删除",
-        minutes: 25,
-      }, {
-        id: 3,
         name: "点击开始按钮来专注计时",
         minutes: 25,
+        valid: 1,
+      }, {
+        id: 1,
+        name: "左滑待办编辑或删除",
+        minutes: 25,
+        valid: 1,
+      },
+      {
+        id: 2,
+        name: "右上角 + 号添加待办",
+        minutes: 10,
+        valid: 1,
+      },
+      {
+        id: 3,
+        name: "待办是您要专注的事",
+        minutes: 1,
+        valid: 1,
       }
     ],
 
@@ -88,8 +94,15 @@ App({
     // recordID: 0
   },
 
-  getTasks() { // 待完善
-    return this.globalData.tasks
+
+  getTasks() { // 从数据库中获取全部任务记录
+    // return Object.assign([], this.globalData.tasks)
+    console.log('before valid', this.globalData.tasks)
+    let validTasks = this.globalData.tasks.filter((x) => { return x.valid === 1 })
+    console.log("before sort:", validTasks)
+    let a = validTasks.sort(function(a, b){ return a.id > b.id })
+    console.log("after sort:", a)
+    return validTasks.sort((a, b) => { return (a.id > b.id) ? -1 : (a.id < b.id) ? 1 : 0 })
   },
 
   getTaskById(id) { // 待完善
@@ -99,6 +112,7 @@ App({
 
   addTask(t){
     console.log('add task ', this.globalData.tasks.length, t)
+    t.valid = 1
     this.globalData.tasks.push(t)
   },
   
@@ -110,7 +124,7 @@ App({
   
   deleteTaskById(id) { // 待完善
     console.log('delete task ', id, this.globalData.tasks[id])
-    delete this.globalData.tasks[id]
+    this.globalData.tasks[id].valid = 0
   },
 
   getNextTaskId(){

@@ -71,7 +71,8 @@ Page({
   onShow: function() {
     console.log('timelines onShow')
     console.log(app.getTasks())
-    const todayRecord = app.getOneDayAllRecordMS(Date.now())
+    console.log('this.data.newDate', this.data.newDate)
+    const todayRecord = app.getOneDayAllRecordMS(new Date(this.data.newDate || Date.now()).getTime())
     const taskRecords = []
     const taskArry = []
     for (let i = 0; i < todayRecord.length; ++i){
