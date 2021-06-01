@@ -18,7 +18,6 @@
       <button class="{{'button-dwm button-right' + (buttonChecked == buttonYear? ' tap': '')}}"
         bindtap="buttonYearTap">年</button>
     </view>
-    <view wx:if ="{{noData}}">no data</view>
   </view>
   <view style="flex-grow: 1; position: relative">
     <view hidden ="{{!noData}}" class="no-data">暂无数据</view>
