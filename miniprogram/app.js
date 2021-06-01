@@ -37,7 +37,7 @@ App({
         })
       }
       db = wx.cloud.database() // 获取数据库的引用
-      this.addRecordsForTest()
+      
       // this.AddFormatToDate()
       // console.log("lg")
     }
@@ -127,7 +127,8 @@ App({
     })
     .then(res => {
       console.log("init records:", res.result.data)
-      // this.globalData.record = res.result.data
+      this.globalData.record = res.result.data
+      this.addRecordsForTest()
     })
     .catch(console.error)
     
