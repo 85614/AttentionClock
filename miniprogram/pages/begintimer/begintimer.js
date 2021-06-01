@@ -22,7 +22,7 @@ Page({
     // 系统设备信息
     var res = wx.getSystemInfoSync()
     var rate = 750 / res.windowWidth
-    let tasks =  wx.getStorageSync('tasks')
+    // let tasks =  wx.getStorageSync('tasks')
 
     
 
