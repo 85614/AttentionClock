@@ -1,0 +1,16 @@
+<!--index.wxml-->
+<view >
+
+  <view class="task">
+    <scroll-view scroll-y="true" style="height: 300rpx; radius: 90%;" bindscrolltoupper="upper" bindscrolltolower="lower"
+      bindscroll="scroll" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}">
+
+    </scroll-view>
+    <view class="task-detail">接下来的{{time}}分钟，你将专注做这件事</view>
+  </view>
+
+  <view class="start" bindtap="start">
+    <text>开始专注</text>
+  </view>
+</view>
+

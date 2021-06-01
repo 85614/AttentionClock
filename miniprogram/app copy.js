@@ -3,6 +3,7 @@ const themeListeners = []
 
 const oneDayMs = 1000 * 60 *60 *24 // 一天的毫秒数
 let db // 云数据库的引用
+let f1 = 1, f2 = 1
 
 App({
   onLaunch() {
@@ -74,14 +75,9 @@ App({
     GRID_DEMO_URL: '/example/index',
     iconTabbar: '/example/images/icon_tabbar.png',
     tasks: [{
-        id: 0,
-        name: "点击开始按钮来专注计时",
-        minutes: 25,
-        valid: 1,
-      }, {
-        id: 1,
-        name: "左滑待办编辑或删除",
-        minutes: 25,
+        id: 3,
+        name: "待办是您要专注的事",
+        minutes: 1,
         valid: 1,
       }, {
         id: 2,
@@ -89,11 +85,16 @@ App({
         minutes: 10,
         valid: 1,
       }, {
-        id: 3,
-        name: "待办是您要专注的事",
-        minutes: 1,
+        id: 1,
+        name: "左滑待办编辑或删除",
+        minutes: 25,
         valid: 1,
-      },
+      }, {
+        id: 0,
+        name: "点击开始按钮来专注计时",
+        minutes: 25,
+        valid: 1,
+      }
     ],
 
 
@@ -108,12 +109,6 @@ App({
       }
     ],
 
-  },
-
-  loadData(success) {
-    this.initData().then(res => {
-      success()
-    })
   },
 
   // 初始化
@@ -159,7 +154,7 @@ App({
         }
       }
       this.globalData.tasks = res.result.data.concat(this.globalData.tasks)
-      this.globalData.tasks.sort((a, b) => { return (a.id < b.id) ? -1 : (a.id > b.id) ? 1 : 0 })
+      
     })
     .catch(console.error)
 
@@ -167,7 +162,7 @@ App({
 
   getTasks() { // 从数据库中获取全部任务记录
     // return Object.assign([], this.globalData.tasks)
-    let validTasks = this.globalData.tasks.filter((x) => {return x.valid === 1})
+    let validTasks = this.globalData.tasks.filter(this.checkValid)
     console.log("before sort:", validTasks)
     let a = validTasks.sort(function(a, b){ return a.id > b.id })
     console.log("after sort:", a)
@@ -176,7 +171,6 @@ App({
 
   getTaskById(id) { // 待完善，已测
     console.log('get task ', id, this.globalData.tasks[id])
-    console.log('tasks now ', this.globalData.tasks)
     return this.globalData.tasks[id]
   },
 
@@ -233,6 +227,7 @@ App({
 
   setTaskById(id, t) {  // 已测
     // console.log('set task ', id, 'from', this.globalData.tasks[id], 'to', t)
+    t.valid = 1
     // Object.assign(this.globalData.tasks[id], t)
     const _this = this
     // wx.cloud.callFunction({
@@ -248,12 +243,12 @@ App({
     // })
     // .catch(console.error)
     let newTasks = t
-    db.collection('tasks').where({
+    db.collection('records').where({
       id: newTasks.id,
     }).get({
       success: function(res) {
         id = res.data[0]._id
-        db.collection('tasks').doc(id).set({
+        db.collection('records').doc(id).set({
           data: newTasks,
           success: function(res) {},
           fail: console.error,
@@ -275,6 +270,9 @@ App({
     return e
   },
 
+  checkValid(task) {
+    return task.valid === 1
+  },
 
   
 
@@ -451,12 +449,12 @@ App({
 
   
   
-  addRecord2(record) {
+  addRecord(record) {
     // 添加一条记录
     this.globalData.record.push(record)
   },
   
-  addRecord(record) { // 待测
+  addRecord2(record) { // 待测
     // 添加一条记录
     const _this = this
     
@@ -635,14 +633,13 @@ App({
             durationTime: Math.floor(Math.random()*8640000),
           })
         }
-        
       }
-      day+=100;
+      day++;
     }
     // console.log(this.globalData.record)
   },
   addRecordForTest2(ms_start, ms_end) {
-    const n = 20;
+    const n = 10;
     for (let i = 0; i < n; ++i) {
       this.addRecord({
         taskID: this.randomID(),

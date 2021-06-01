@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "my-bar": "../../components/bar/index",
+    "my-pie": "../../components/pie/index",
+    "my-line": "../../components/line/index",
+    "mp-icon": "weui-miniprogram/icon/icon"
+  }
+}

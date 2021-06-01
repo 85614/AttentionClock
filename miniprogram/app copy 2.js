@@ -3,6 +3,7 @@ const themeListeners = []
 
 const oneDayMs = 1000 * 60 *60 *24 // 一天的毫秒数
 let db // 云数据库的引用
+let f1 = 1, f2 = 1
 
 App({
   onLaunch() {
@@ -159,7 +160,7 @@ App({
         }
       }
       this.globalData.tasks = res.result.data.concat(this.globalData.tasks)
-      this.globalData.tasks.sort((a, b) => { return (a.id < b.id) ? -1 : (a.id > b.id) ? 1 : 0 })
+      
     })
     .catch(console.error)
 
@@ -167,7 +168,7 @@ App({
 
   getTasks() { // 从数据库中获取全部任务记录
     // return Object.assign([], this.globalData.tasks)
-    let validTasks = this.globalData.tasks.filter((x) => {return x.valid === 1})
+    let validTasks = this.globalData.tasks.filter(this.checkValid)
     console.log("before sort:", validTasks)
     let a = validTasks.sort(function(a, b){ return a.id > b.id })
     console.log("after sort:", a)
@@ -176,7 +177,6 @@ App({
 
   getTaskById(id) { // 待完善，已测
     console.log('get task ', id, this.globalData.tasks[id])
-    console.log('tasks now ', this.globalData.tasks)
     return this.globalData.tasks[id]
   },
 
@@ -233,6 +233,7 @@ App({
 
   setTaskById(id, t) {  // 已测
     // console.log('set task ', id, 'from', this.globalData.tasks[id], 'to', t)
+    t.valid = 1
     // Object.assign(this.globalData.tasks[id], t)
     const _this = this
     // wx.cloud.callFunction({
@@ -248,12 +249,12 @@ App({
     // })
     // .catch(console.error)
     let newTasks = t
-    db.collection('tasks').where({
+    db.collection('records').where({
       id: newTasks.id,
     }).get({
       success: function(res) {
         id = res.data[0]._id
-        db.collection('tasks').doc(id).set({
+        db.collection('records').doc(id).set({
           data: newTasks,
           success: function(res) {},
           fail: console.error,
@@ -275,6 +276,9 @@ App({
     return e
   },
 
+  checkValid(task) {
+    return task.valid === 1
+  },
 
   
 
