@@ -52,3 +52,7 @@ ec-canvas {
   justify-content: space-between;
   box-sizing: border-box;
 } 
+
+.my-icon {
+  margin: 0 10px;
+}
