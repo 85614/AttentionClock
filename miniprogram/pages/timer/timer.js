@@ -133,6 +133,8 @@ Page({
 
   // 动圆函数 
   drawActive: function () {
+    clearInterval(this.data.timer)
+    clearInterval(this.data.exitTimer)
     let _this = this
     let currentTime = parseInt(this.data.time) * 60 * 1000 - _this.data.mTime
     let timestep = _this.data.timestep
@@ -232,6 +234,7 @@ Page({
   // 暂停按钮 
   pause: function () {
     clearInterval(this.data.timer)
+    clearInterval(this.data.exitTimer)
     if (!this.data.setGiveUp) {
       this.setData({
         pauseShow: false,

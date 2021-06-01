@@ -107,7 +107,7 @@ Page({
         taskRecords
      })
    }
-   wx.setStorageSync('taskRecords', this.data.taskRecords)
+  //  wx.setStorageSync('taskRecords', this.data.taskRecords)
   },
 
   // 添加记录
@@ -140,7 +140,7 @@ Page({
     this.setData({
       dialogAddShow: false,
     })
-    wx.setStorageSync('taskRecords', this.data.taskRecords)
+    // wx.setStorageSync('taskRecords', this.data.taskRecords)
 
   },
 
@@ -245,7 +245,7 @@ Page({
       showMoreOptionsIndex: null,
       dialogEditTime: null
     })
-    wx.setStorageSync('taskRecords', this.data.taskRecords)
+    // wx.setStorageSync('taskRecords', this.data.taskRecords)
   },
 
   dialogEditInput: function(e) {
@@ -278,7 +278,7 @@ Page({
         showMoreOptionsIndex: null,
       })
     }
-    wx.setStorageSync('taskRecords', this.data.taskRecords)
+    // wx.setStorageSync('taskRecords', this.data.taskRecords)
   }
 
 
