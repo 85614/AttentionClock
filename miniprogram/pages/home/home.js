@@ -106,7 +106,7 @@ CustomPage({
       TaskEditingIdx: idx
     })
     this.data.TaskEditingName = this.data.tasks[idx].name
-    this.data.TaskEdigingTime = this.data.tasks[idx].minutes
+    this.data.TaskEditingTime = this.data.tasks[idx].minutes
   },
   TaskDetail(idx) {
     this.setData({
@@ -135,7 +135,7 @@ CustomPage({
     console.log("before update task check tasks", this.data.tasks)
     const t = this.data.tasks[this.data.TaskEditingIdx]
     t.name = this.data.TaskEditingName
-    t.minutes = this.data.TaskEdigingTime
+    t.minutes = this.data.TaskEditingTime
     app.setTaskById(t.id, t)
     this.updateTasks()
   },
@@ -157,8 +157,23 @@ CustomPage({
   tapDialogButton(e, o) {
     // 按下添加待办对话框的按钮
     console.log("tapDialogButton(e) e:", e, "owner;", o)
-    if (e.detail.item.value)
+    if (e.detail.item.value) {
+      if (!this.data.newTaskName) {
+        this.setData({
+          error_msg: '请输入待办名称',
+          show_err: true
+        })
+        return
+      }
+      if (!this.data.newTaskTime) {
+        this.setData({
+          error_msg: '请输入时间',
+          show_err: true
+        })
+        return
+      }
       this.addTask()
+    }
     this.setData({
       dialogAgentAddShow: false,
     })
@@ -166,8 +181,23 @@ CustomPage({
   tapDialogButtonEdit(e, o) {
     // 按下编辑待办对话框的按钮
     console.log("tapDialogButton(e) e:", e, "owner;", o)
-    if (e.detail.item.value)
+    if (e.detail.item.value) {
+      if (!this.data.TaskEditingName) {
+        this.setData({
+          error_msg: '请输入待办名称',
+          show_err: true
+        })
+        return
+      }
+      if (!this.data.TaskEditingTime) {
+        this.setData({
+          error_msg: '请输入时间',
+          show_err: true
+        })
+        return
+      }
       this.updateTask()
+    }
     this.setData({
       dialogAgentEditShow: false,
     })
@@ -215,7 +245,7 @@ CustomPage({
     // 编辑待办对话框待办时间输入改变
     // console.log("inputNewTaskName(e) e:", e)
     console.log("inputNewTaskTime(e) e.detail.value:", e.detail.value)
-    this.data.TaskEdigingTime = e.detail.value
+    this.data.TaskEditingTime = e.detail.value
   }
 
 });
