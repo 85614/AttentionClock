@@ -19,6 +19,21 @@ CustomPage({
     }
   },
   onLoad: function () {
+    if (app.loadData) {
+      wx.showLoading({
+        title: '加载中',
+      })
+      app.loadData(
+        () => {
+          this.setData({
+            tasks: app.getTasks()
+          })
+          wx.hideLoading({
+            success: (res) => { },
+          })
+        }
+      )
+    }
     this.setData({
       dialogAgentAddShow: false,      
       dialogButtons: [{
