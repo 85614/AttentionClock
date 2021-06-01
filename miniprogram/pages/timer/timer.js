@@ -52,19 +52,20 @@ Page({
     })
     this.start()
     // this.data.totalExitTime = 0 // 累计离开时间清0
+    wx.hideHomeButton()
   },
 
   onHide: function () {
     const _this = this
     console.log("onHide")
-    if (!_this.exit) {
-      this.pause()
-    }
+    // if (!_this.exit) { onHide不再暂停
+    //   this.pause()
+    // }
   },
 
   onShow: function () {
     console.log("onShow")
-    wx.hideHomeButton()
+    // wx.hideHomeButton() 移到onLoad
   },
 
   onUnload: function () {
