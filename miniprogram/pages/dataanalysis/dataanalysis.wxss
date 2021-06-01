@@ -56,3 +56,8 @@ ec-canvas {
 .my-icon {
   margin: 0 10px;
 }
+
+.rotate {
+  transform: rotateY(180deg);
+}
+
