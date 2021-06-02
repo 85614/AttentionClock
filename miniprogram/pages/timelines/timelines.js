@@ -70,22 +70,24 @@ Page({
 
   onShow: function() {
     console.log('timelines onShow')
-    console.log(app.getTasks())
+    // console.log(app.getAllTasks())
     console.log('this.data.newDate', this.data.newDate)
     const todayRecord = app.getOneDayAllRecordMS(new Date(this.data.newDate || Date.now()).getTime())
     const taskRecords = []
     const taskArry = []
+    const validTasks = app.getValidTasks()
     for (let i = 0; i < todayRecord.length; ++i){
       console.log(app.get_formated_record(todayRecord[i]))
       taskRecords.push(app.get_formated_record(todayRecord[i]))
     }
-    for(let i = 0; i < app.getTasks().length; i++) {
-      taskArry.push(app.getTasks()[i].name)
+    for(let i = 0; i < validTasks.length; i++) {
+      taskArry.push(app.getTaskById(validTasks[i].id).name)
     }
     this.setData({
       hasData: taskRecords != 0,
       taskRecords: taskRecords,
       taskArry: taskArry,
+      validTasks,
       newDate: new Date().format("yyyy-MM-dd")
     })
   },
@@ -121,7 +123,7 @@ Page({
     if(e.detail.index == 1) {
       const newDate = this.data.newDate + " " + this.data.newStartTime
       const newRecord = {
-        taskID: this.data.taskArryindex,
+        taskID: this.data.validTasks[this.data.taskArryindex].id,
         id: app.getNextRecordId(),
         startTime: new Date(newDate).getTime(),
         isFinish: 1,

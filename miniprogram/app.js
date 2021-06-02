@@ -2,14 +2,15 @@
 const themeListeners = []
 
 const oneDayMs = 1000 * 60 *60 *24 // 一天的毫秒数
-let db // 云数据库的引用
 
 App({
   onLaunch() {
     console.log('App Launch')
     this.AddFormatToDate()
     // this.test()
-    
+    if (this.globalData.records.length === 0) {
+      this.addRecordsForTest()
+    }
     wx.login({
       success: res => {
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
@@ -73,7 +74,7 @@ App({
     theme: 'light',
     GRID_DEMO_URL: '/example/index',
     iconTabbar: '/example/images/icon_tabbar.png',
-    tasks: [{
+    tasks: wx.getStorageSync('tasks') || [{
         id: 0,
         name: "点击开始按钮来专注计时",
         minutes: 25,
@@ -83,12 +84,14 @@ App({
         name: "左滑待办编辑或删除",
         minutes: 25,
         valid: 1,
-      }, {
+      },
+      {
         id: 2,
         name: "右上角 + 号添加待办",
         minutes: 10,
         valid: 1,
-      }, {
+      },
+      {
         id: 3,
         name: "待办是您要专注的事",
         minutes: 1,
@@ -108,6 +111,7 @@ App({
       }
     ],
 
+    // recordID: 0
   },
 
   loadData(success) {
@@ -167,6 +171,20 @@ App({
     })
     .catch(console.error)
 
+  },
+
+  getValidTasks() { // 从数据库中获取全部任务记录
+    // return Object.assign([], this.globalData.tasks)
+    console.log('before valid', this.globalData.tasks)
+    let validTasks = this.globalData.tasks.filter((x) => { return x.valid === 1 })
+    console.log("before sort:", validTasks)
+    let a = validTasks.sort(function(a, b){ return a.id > b.id })
+    console.log("after sort:", a)
+    return validTasks.sort((a, b) => { return (a.id > b.id) ? -1 : (a.id < b.id) ? 1 : 0 })
+  },
+
+  getAllTasks() {
+    return Object.assign([], this.globalData.tasks)
   },
 
   getTasks() { // 从数据库中获取全部任务记录
@@ -343,7 +361,7 @@ App({
 
   getRecord(id) {
     // 把id为id的record
-    const record = this.globalData.record
+    const record = this.globalData.records
     for (let i = 0; i < record.length; ++i) {
       if (record[i].recordID === id)
         return record[i]
@@ -352,7 +370,8 @@ App({
 
   setRecord2(id, r) { 
     // 把id为id的record
-    const record = this.globalData.record
+    const record = this.globalData.records
+    // console.log('set record ', id)
     for (let i = 0; i < record.length; ++i) {
       if (record[i].recordID == id){
         record[i] = r
@@ -447,7 +466,7 @@ App({
     })
     for (let i = 0; i < record.length; ++i) {
       if (record[i].recordID == id){
-        record.splice(i, 1)
+        delete record[i]
         console.log("you have delete record", i)
       }
     }
@@ -543,7 +562,7 @@ App({
 
   getDayRangeMS(ms) {
     const d0 = new Date(ms)
-    // console.log(d0, "当日")
+    console.log(d0, "当日")
     const theDay = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate())
     let nextDay = new Date(Date.parse(theDay) + oneDayMs)
     return [theDay, nextDay]
@@ -551,7 +570,7 @@ App({
 
   getWeekRangeMS(ms) {
     let d0 = new Date(ms)
-    // console.log(d0, "本周")
+    console.log(d0, "本周")
     d0 = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate())
 
     const ms_start = Date.parse(d0) - oneDayMs * d0.getDay()
@@ -609,8 +628,8 @@ App({
   },
 
   getRecordTimeRange(d_start, d_end) {
-    // console.log(d_start, "到", d_end, "的所有记录")
-    const record = this.globalData.record
+    console.log(d_start, "到", d_end, "的所有记录")
+    const record = this.globalData.records
     const ms_start = d_start.getTime()
     const ms_end = d_end.getTime()
     let ans = []
@@ -618,8 +637,6 @@ App({
     for (let i = 0; i < record.length; ++i) {
       if (record[i] && record[i].startTime >= ms_start && record[i].startTime < ms_end)
         ans.push(record[i])
-
-        console.log("ffcucck: ", record[i])
     }
     return ans
   },
@@ -662,6 +679,19 @@ App({
         durationTime: parseInt((ms_end-ms_start) / n), // ms
       })
     }
+    let d = new Date()
+    addRecordsRange(d.getTime() - oneDayMs * 600, d.getTime(), 36)  // 前600天26条
+    addRecordsRange(d.getTime() - oneDayMs * 60, d.getTime(), 120) // 前 60天 120条
+    addRecordsRange(d.getTime() - oneDayMs * 14, d.getTime(), 21) // 前两个星期 21条
+    console.log('init records:')
+    console.log(this.globalData.records)
+    let r2 =[]
+    for (let i = 0; i < this.globalData.records.length; i++) {
+      const r = this.globalData.records[i];
+      r2.push(this.get_formated_record(r))
+    }
+    console.log(r2)
+    this.updateStorageRecords()
   },
 
   randomID() {
@@ -702,7 +732,7 @@ App({
     get_finished_count() {
       // 获取累积已完成的专注次数
       let count = 0
-      const record = this.globalData.record
+      const record = this.globalData.records
       for (let i = 0; i < record.length; ++i)
         if (record[i] && record[i].isFinish)
           ++count;
@@ -711,7 +741,7 @@ App({
     get_finished_total_time() {
       // 获取累积专注时长/分钟
       let count = 0
-      const record = this.globalData.record
+      const record = this.globalData.records
       for (let i = 0; i < record.length; ++i)
         if (record[i] && record[i].isFinish)
           count += parseInt(record[i].durationTime / 1000 / 60)
@@ -725,12 +755,14 @@ App({
       // 获取从d_start 到d_end的不同task的情况
       console.log(d_start, "到", d_end, "的记录统计情况")
       let ans = []
-      const record = this.globalData.record
-      const ms_start = d_start.getTime()
-      const ms_end = d_end.getTime()
+      const record = this.globalData.records
+      const ms_start = d_start ? d_start.getTime() : undefined
+      const ms_end = d_end ? d_end.getTime() : undefined
       for (let i = 0; i < record.length; ++i){
         const r = record[i]
-        if (r && r.isFinish && r.startTime >= ms_start && r.startTime < ms_end) {
+        if (r && r.isFinish &&
+          (!ms_start || r.startTime >= ms_start) &&
+          (!ms_end || r.startTime < ms_end)) {
           ans[r.taskID] = ans[r.taskID] || {
             taskID: r.taskID,
             count: 0,
@@ -854,7 +886,7 @@ App({
 
   get_formated_record(r) {
     // 获取信息是字符串的记录
-    return Object.assign({}, r ,{
+    return Object.assign({}, r, {
       id: r.recordID,
       taskName: this.getTaskById(r.taskID).name,
       taskStartTime: new Date(r.startTime).format("yyyy-MM-dd hh:mm"),
@@ -867,7 +899,7 @@ App({
 
   make_record(r) {
     // 生成原始record数据
-    return Object.assign({}, r ,{
+    return ({
       taskID: r.taskID,
       recordID: r.id,
       startTime:  r.startTime,
