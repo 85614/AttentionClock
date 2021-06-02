@@ -177,7 +177,7 @@ App({
     const record = this.globalData.records
     for (let i = 0; i < record.length; ++i) {
       if (record[i].recordID == id){
-        record.splice(i, 1)
+        delete record[i]
         console.log("you have delete record", i)
       }
     }
