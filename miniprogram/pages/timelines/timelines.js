@@ -70,7 +70,7 @@ Page({
 
   onShow: function() {
     console.log('timelines onShow')
-    console.log(app.getTasks())
+    console.log(app.getAllTasks())
     console.log('this.data.newDate', this.data.newDate)
     const todayRecord = app.getOneDayAllRecordMS(new Date(this.data.newDate || Date.now()).getTime())
     const taskRecords = []
@@ -79,8 +79,8 @@ Page({
       console.log(app.get_formated_record(todayRecord[i]))
       taskRecords.push(app.get_formated_record(todayRecord[i]))
     }
-    for(let i = 0; i < app.getTasks().length; i++) {
-      taskArry.push(app.getTasks()[i].name)
+    for(let i = 0; i < app.getAllTasks().length; i++) {
+      taskArry.push(app.getAllTasks()[i].name)
     }
     this.setData({
       hasData: taskRecords != 0,

@@ -55,10 +55,10 @@
             </view>
             <view>
                 <view style="display: inline-block; width: 50%;">
-                    1
+                    {{the_task_valid_count}}
                 </view>
                 <view style="display: inline-block; width: 50%;">
-                    10min
+                    {{the_task_valid_time}}min
                 </view>
             </view>
         </mp-dialog>

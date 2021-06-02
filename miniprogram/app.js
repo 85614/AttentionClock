@@ -110,7 +110,7 @@ App({
     })
   },
 
-  getTasks() { // 从数据库中获取全部任务记录
+  getSortedTasks() { // 从数据库中获取全部任务记录
     // return Object.assign([], this.globalData.tasks)
     console.log('before valid', this.globalData.tasks)
     let validTasks = this.globalData.tasks.filter((x) => { return x.valid === 1 })
@@ -120,6 +120,9 @@ App({
     return validTasks.sort((a, b) => { return (a.id > b.id) ? -1 : (a.id < b.id) ? 1 : 0 })
   },
 
+  getAllTasks() {
+    return Object.assign([], this.globalData.tasks)
+  },
   getTaskById(id) { // 待完善
     console.log('get task ', id, this.globalData.tasks[id])
     return this.globalData.tasks[id]
@@ -363,11 +366,13 @@ App({
       console.log(d_start, "到", d_end, "的记录统计情况")
       let ans = []
       const record = this.globalData.records
-      const ms_start = d_start.getTime()
-      const ms_end = d_end.getTime()
+      const ms_start = d_start ? d_start.getTime() : undefined
+      const ms_end = d_end ? d_end.getTime() : undefined
       for (let i = 0; i < record.length; ++i){
         const r = record[i]
-        if (r && r.isFinish && r.startTime >= ms_start && r.startTime < ms_end) {
+        if (r && r.isFinish &&
+          (!ms_start || r.startTime >= ms_start) &&
+          (!ms_end || r.startTime < ms_end)) {
           ans[r.taskID] = ans[r.taskID] || {
             taskID: r.taskID,
             count: 0,

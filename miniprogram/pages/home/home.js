@@ -25,9 +25,7 @@ CustomPage({
       })
       app.loadData(
         () => {
-          this.setData({
-            tasks: app.getTasks()
-          })
+          this.updateGlobalData()
           wx.hideLoading({
             success: (res) => { },
           })
@@ -65,9 +63,18 @@ CustomPage({
         action: this.deleteTask,
         extClass: 'slideview-button'
       }],
-      tasks: app.getTasks()
+      tasks: app.getSortedTasks()
     })
     this.updateTasks()
+  },
+  onShow() {
+    this.updateGlobalData()
+  },
+  updateGlobalData() {
+    this.setData({
+      tasks: app.getSortedTasks(),
+      statistics: app.getRangeRecordStatistics()
+    })
   },
   slideButtonTap(e) {
     // 左滑后的按钮按下
@@ -109,9 +116,14 @@ CustomPage({
     this.data.TaskEditingTime = this.data.tasks[idx].minutes
   },
   TaskDetail(idx) {
+    const t = this.data.tasks[idx]
+    const task_id = t.id
+    const statistics = this.data.statistics
+    console.log('statistics', statistics)
     this.setData({
       dialogAgentDetailShow: true, 
-      TaskEditingIdx: idx
+      the_task_valid_count: statistics[task_id].count,
+      the_task_valid_time: statistics[task_id].total_time
     })
   },
   addTask() {
