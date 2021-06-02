@@ -162,9 +162,11 @@ App({
   setRecord(id, r) {
     // 把id为id的record
     const record = this.globalData.records
+    // console.log('set record ', id)
     for (let i = 0; i < record.length; ++i) {
       if (record[i].recordID == id){
-        record[i] =r
+        // console.log('from', record[i], 'to', r)
+        record[i] = r
       }
     }
     this.updateStorageRecords()
@@ -489,7 +491,7 @@ App({
 
   get_formated_record(r) {
     // 获取信息是字符串的记录
-    return ({
+    return Object.assign({}, r, {
       id: r.recordID,
       taskName: this.globalData.tasks[r.taskID].name,
       taskStartTime: new Date(r.startTime).format("yyyy-MM-dd hh:mm"),
