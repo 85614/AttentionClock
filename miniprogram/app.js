@@ -2,6 +2,7 @@
 const themeListeners = []
 
 const oneDayMs = 1000 * 60 *60 *24 // 一天的毫秒数
+let db
 
 App({
   onLaunch() {
@@ -100,7 +101,7 @@ App({
     ],
 
 
-    record: [{
+    records: [{
         taskID: 1,
         recordID: 1,
         startTime: 123456789,  // format time
@@ -136,7 +137,7 @@ App({
     })
     .then(res => {
       console.log("init records:", res.result.data)
-      this.globalData.record = res.result.data
+      this.globalData.records = res.result.data
       // this.addRecordsForTest()
     })
     .catch(console.error)
@@ -301,7 +302,7 @@ App({
   
 
   getRecords() { // 从数据库中获取全部
-    return this.globalData.record
+    return this.globalData.records
   },
 
   deleteTaskById2(id) { // 待完善
@@ -416,7 +417,7 @@ App({
       }
     })
 
-    const record = this.globalData.record
+    const record = this.globalData.records
     for (let i = 0; i < record.length; ++i) {
       if (record[i].recordID === id){
         record[i] = r
@@ -429,7 +430,7 @@ App({
   
   deleteRecord2(id) {
     // 删除record
-    const record = this.globalData.record
+    const record = this.globalData.records
     for (let i = 0; i < record.length; ++i) {
       if (record[i].recordID == id){
         record.splice(i, 1)
@@ -440,7 +441,7 @@ App({
 
   deleteRecord(id) { // 已测
     // 删除record
-    const record = this.globalData.record
+    const record = this.globalData.records
     const _this = this
     console.log(id)
     
@@ -476,14 +477,14 @@ App({
   
   addRecord2(record) {
     // 添加一条记录
-    this.globalData.record.push(record)
+    this.globalData.records.push(record)
   },
   
   addRecord(record) { // 待测
     // 添加一条记录
     const _this = this
-    _this.globalData.record.push(record)
-    console.log("after adding: ", this.globalData.record)
+    _this.globalData.records.push(record)
+    console.log("after adding: ", this.globalData.records)
     // wx.cloud.callFunction({
     //   // 云函数名称
     //   name: 'addRecord',
@@ -500,7 +501,7 @@ App({
       success: function(res) {
         console.log("new record: ", res)
         // newRecord = res.data
-        //  _this.globalData.record.push(res.result.data)
+        //  _this.globalData.records.push(res.result.data)
         // Object.assign(record, res.result.data )
         
       },
@@ -516,7 +517,7 @@ App({
 
 
   getNextRecordId2(){
-    return this.globalData.record.length
+    return this.globalData.records.length
   },
 
   getNextRecordId() { 
@@ -654,7 +655,7 @@ App({
         for(let i = 0; i < count; i++) {
           this.addRecord({
             taskID: i % this.globalData.tasks.length,
-            recordID: this.globalData.record.length,
+            recordID: this.globalData.records.length,
             startTime: date.getTime(),
             isFinish: i == 0 ? 0 : 1,
             exitTime: i,  // ms
@@ -665,7 +666,7 @@ App({
       }
       day+=100;
     }
-    // console.log(this.globalData.record)
+    // console.log(this.globalData.records)
   },
   addRecordForTest2(ms_start, ms_end) {
     const n = 20;

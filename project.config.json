@@ -1,18 +1,14 @@
 {
-  "description": "项目配置文件",
-  "packOptions": {
-    "ignore": []
-  },
   "miniprogramRoot": "miniprogram/",
   "cloudfunctionRoot": "cloudfunctions/",
   "setting": {
     "urlCheck": true,
     "es6": true,
-    "enhance": false,
+    "enhance": true,
     "postcss": true,
     "preloadBackgroundData": false,
     "minified": true,
-    "newFeature": false,
+    "newFeature": true,
     "coverView": true,
     "nodeModules": false,
     "autoAudits": false,
@@ -32,7 +28,6 @@
       "outputPath": ""
     },
     "enableEngineNative": false,
-    "bundle": false,
     "useIsolateContext": true,
     "useCompilerModule": true,
     "userConfirmedUseCompilerModuleSwitch": false,
@@ -41,21 +36,10 @@
     "packNpmRelationList": [],
     "minifyWXSS": true
   },
-  "compileType": "miniprogram",
   "appid": "wx1c4a3e6b4fa3165f",
-  "appid-zzq": "wx80606250a368fef5",
-  "projectname": "AttentionClock",
-  "libVersion": "2.16.0",
+  "projectname": "miniprogram-4",
+  "libVersion": "2.14.1",
   "cloudfunctionTemplateRoot": "cloudfunctionTemplate",
-  "debugOptions": {
-    "hidedInDevtools": []
-  },
-  "scripts": {},
-  "staticServerOptions": {
-    "baseURL": "",
-    "servePath": ""
-  },
-  "isGameTourist": false,
   "condition": {
     "search": {
       "list": []
@@ -67,9 +51,6 @@
       "list": []
     },
     "game": {
-      "list": []
-    },
-    "gamePlugin": {
       "list": []
     },
     "miniprogram": {
