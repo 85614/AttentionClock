@@ -110,7 +110,7 @@ App({
     })
   },
 
-  getSortedTasks() { // 从数据库中获取全部任务记录
+  getValidTasks() { // 从数据库中获取全部任务记录
     // return Object.assign([], this.globalData.tasks)
     console.log('before valid', this.globalData.tasks)
     let validTasks = this.globalData.tasks.filter((x) => { return x.valid === 1 })

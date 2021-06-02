@@ -63,7 +63,7 @@ CustomPage({
         action: this.deleteTask,
         extClass: 'slideview-button'
       }],
-      tasks: app.getSortedTasks()
+      tasks: app.getValidTasks()
     })
     this.updateTasks()
   },
@@ -72,7 +72,7 @@ CustomPage({
   },
   updateGlobalData() {
     this.setData({
-      tasks: app.getSortedTasks(),
+      tasks: app.getValidTasks(),
       statistics: app.getRangeRecordStatistics()
     })
   },
