@@ -80,15 +80,15 @@ App({
     ],
 
 
-    record: [{
-        taskID: 1,
-        recordID: 1,
-        startTime: 123456789,  // format time
-        isFinish: 1,
-        exitTime: 12345,  // ms
-        durationTime: 1234, // ms
-
-      }
+    record: [
+      // {
+      //   taskID: 1,
+      //   recordID: 1,
+      //   startTime: 123456789,  // format time
+      //   isFinish: 1,
+      //   exitTime: 12345,  // ms
+      //   durationTime: 1234, // ms
+      // }
     ],
 
     // recordID: 0
@@ -167,6 +167,11 @@ App({
     this.globalData.record.push(record)
   },
   
+  addRecordNotStroe(record) {
+    // 添加一条记录
+    this.globalData.record.push(record)
+  },
+
   getNextRecordId(){
     return this.globalData.record.length
   },
@@ -253,28 +258,33 @@ App({
  
 
   addRecordsForTest() {
-    let year = 2019
-    let day = 1;
-    let date
-    while(year <= 2021) {
-      if(Math.round(Math.random())) {
-        date = new Date(2019, 0, day, 8 + Math.floor(Math.random()*12))
-        year = date.getFullYear();
-        let count = Math.floor(Math.random()*10)
-        for(let i = 0; i < count; i++) {
-          this.addRecord({
-            taskID: i % this.globalData.tasks.length,
-            recordID: this.globalData.record.length,
-            startTime: date.getTime(),
-            isFinish: i == 0 ? 0 : 1,
-            exitTime: i,  // ms
-            durationTime: Math.floor(Math.random()*8640000),
-          })
-        }
+    const addRecordsRange = (ms_begin, ms_end, count) => {
+      for (let i = 0; i < count; ++i) {
+        let t = ms_begin + (ms_end - ms_begin) * Math.random()
+        t = parseInt(t / oneDayMs) * oneDayMs
+        t += parseInt(1000 * 60 * 60 * (Math.random() * 12) + 8)
+        this.addRecordNotStroe({
+          taskID: Math.floor(Math.random() * this.globalData.tasks.length),
+          recordID: this.globalData.record.length,
+          startTime: t,
+          isFinish: Math.random() > 0.01 ? 1 : 0,
+          exitTime: Math.floor(Math.random() * 1000 * 60 * 5),  // ms
+          durationTime: Math.floor(Math.random() * 1000 * 60 * 60 * 2),
+        })
       }
-      day++;
     }
+    let d = new Date()
+    addRecordsRange(d.getTime() - oneDayMs * 600, d.getTime(), 36)  // 前600天26条
+    addRecordsRange(d.getTime() - oneDayMs * 60, d.getTime(), 120) // 前 60天 120条
+    addRecordsRange(d.getTime() - oneDayMs * 14, d.getTime(), 21) // 前两个星期 21条
+    console.log('init records:')
     console.log(this.globalData.record)
+    let r2 =[]
+    for (let i = 0; i < this.globalData.record.length; i++) {
+      const r = this.globalData.record[i];
+      r2.push(this.get_formated_record(r))
+    }
+    console.log(r2)
   },
   AddFormatToDate(){
     // 让Date有format函数
@@ -458,7 +468,7 @@ App({
 
   get_formated_record(r) {
     // 获取信息是字符串的记录
-    return Object.assign({}, r ,{
+    return ({
       id: r.recordID,
       taskName: this.globalData.tasks[r.taskID].name,
       taskStartTime: new Date(r.startTime).format("yyyy-MM-dd hh:mm"),
@@ -471,7 +481,7 @@ App({
 
   make_record(r) {
     // 生成原始record数据
-    return Object.assign({}, r ,{
+    return ({
       taskID: r.taskID,
       recordID: r.id,
       startTime:  r.startTime,
