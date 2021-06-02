@@ -118,6 +118,11 @@ App({
 
   // 初始化
   async initData() {
+    if (!this.globalData.isNotFirstCallInitData) {
+      this.globalData.isNotFirstCallInitData = true
+    } else {
+      return
+    }
     await wx.cloud.callFunction({
       // 云函数名称
       name: 'getRecords',
@@ -128,7 +133,7 @@ App({
     .then(res => {
       console.log("init records:", res.result.data)
       this.globalData.record = res.result.data
-      this.addRecordsForTest()
+      // this.addRecordsForTest()
     })
     .catch(console.error)
     
@@ -146,8 +151,6 @@ App({
         this.globalData.tasks = []
       }
       else {  // 初次使用
-
-        ///////////////////////////////////////////缺陷，应该只加到数据库中
         const tasks = this.getTasks()
         console.log("iniiii",tasks)
         let len = this.globalData.tasks.length
@@ -460,7 +463,8 @@ App({
   addRecord(record) { // 待测
     // 添加一条记录
     const _this = this
-    
+    _this.globalData.record.push(record)
+    console.log("after adding: ", this.globalData.record)
     // wx.cloud.callFunction({
     //   // 云函数名称
     //   name: 'addRecord',
@@ -479,11 +483,12 @@ App({
         // newRecord = res.data
         //  _this.globalData.record.push(res.result.data)
         // Object.assign(record, res.result.data )
+        
       },
       fail: console.error,
       complete: console.log
     })
-    _this.globalData.record.push(record)
+    
   },
 
   
@@ -609,9 +614,12 @@ App({
     const ms_start = d_start.getTime()
     const ms_end = d_end.getTime()
     let ans = []
+    console.log("fffffuccccck:", record)
     for (let i = 0; i < record.length; ++i) {
       if (record[i] && record[i].startTime >= ms_start && record[i].startTime < ms_end)
         ans.push(record[i])
+
+        console.log("ffcucck: ", record[i])
     }
     return ans
   },
