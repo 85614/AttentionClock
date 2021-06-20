@@ -115,9 +115,10 @@
   bindbuttontap="tapDialogEditButton">
   <form style="display: flex;  flex-direction: column; justify-content: flex-start;">
     <input type="number"
-      placeholder="编辑你的专注时长"
+      placeholder="修改专注时长（分钟）"
       value="{{dialogEditTime}}"
       bindinput="dialogEditInput"/>
+    <view style="font-size: 0.5em">注意：您仅可以修改至比当前时长短的时长，且修改后无法再增加 </view>
   </form>
 </mp-dialog>
 

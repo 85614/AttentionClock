@@ -10,7 +10,7 @@ Page({
     time: '1', // 任务需要的总时间（分钟
     taskTimeStr: '',
 
-    exitTime: '1', // 离开的时间限制（分钟）
+    exitTime: '5', // 离开的时间限制（分钟）
     totalExitTime: 0, // 在本次专注中离开的总时间
     totExitTimeStr: '',
     exitTimeStr: '', // 离开时间示数
