@@ -1,0 +1,67 @@
+<view class="page" data-weui-theme="{{theme}}" bindtap="closeSlide">
+    <view class="my-page__hd">
+        <view class="page__title">待办
+            <mp-icon style="float: right;" icon="add" color="colorLight" size="25" bindtap="openAddTaskDialog">
+            </mp-icon>
+        </view>
+    </view>
+    <view class="page__bd">
+        <mp-cells style="margin: 10px 0" ext-class="my-cells" title="">
+            <mp-slideview wx:for="{{tasks}}" wx:key="id" show="{{showDetailIndex==item.id}}" buttons="{{moreOptions}}"
+                bindshow="showDetail" bindbuttontap="slideButtonTap" data-idx="{{index}}">
+                <mp-cell ext-class="my-cell">
+                    <view slot="icon" style="font-size: 1em">
+                        <view style="padding-bottom: 5px">{{item.name}}</view>
+                        <view>{{item.minutes}} 分钟</view>
+                    </view>
+                    <view slot="footer" style="font-size: 1.3em" bindtap="startTask" data-id="{{item.id}}">
+                        开始
+                    </view>
+                </mp-cell>
+            </mp-slideview>
+        </mp-cells>
+        <mp-dialog title="添加待办" ext-class="my-dialog" show="{{dialogAgentAddShow}}" bindbuttontap="tapDialogButton"
+            buttons="{{dialogButtons}}">
+            <form rules="{{checkTask}}">
+                <input value="{{newTaskName}}" auto-focus bindinput="inputNewTaskName"
+                    style="margin-bottom: 10px; text-align: left" placeholder="请输入待办名称"></input>
+                <input type="number" value="{{newTaskTime}}" bindinput="inputNewTaskTime" style="text-align: left"
+                    placeholder="请输入时间"></input>
+            </form>
+        </mp-dialog>
+        <mp-dialog title="编辑待办" ext-class="my-dialog" show="{{dialogAgentEditShow}}" bindbuttontap="tapDialogButtonEdit"
+            buttons="{{dialogButtons}}">
+            <form>
+                <input value="{{tasks[TaskEditingIdx].name}}" auto-focus bindinput="inputTaskEditingName"
+                    style="margin-bottom: 10px; text-align: left"></input>
+
+                <input type="number" bindinput="inputTaskEditingTime" style="text-align: left"
+                    value="{{tasks[TaskEditingIdx].minutes}}"></input>
+            </form>
+        </mp-dialog>
+        <mp-dialog title="" ext-class="my-dialog" show="{{dialogAgentDeleteShow}}" bindbuttontap="tapDialogButtonDelete"
+            buttons="{{dialogButtons}}">
+            确认删除？
+        </mp-dialog>
+        <mp-dialog title="待办详情" ext-class="my-dialog" show="{{dialogAgentDetailShow}}"
+            bindbuttontap="tapDialogButtonDetail" buttons="{{dialogButtonsDetail}}">
+            <view>
+                <view style="display: inline-block; width: 50%;">
+                    累计次数
+                </view>
+                <view style="display: inline-block; width: 50%;">
+                    累积时长
+                </view>
+            </view>
+            <view>
+                <view style="display: inline-block; width: 50%;">
+                    {{the_task_valid_count}}
+                </view>
+                <view style="display: inline-block; width: 50%;">
+                    {{the_task_valid_time}}min
+                </view>
+            </view>
+        </mp-dialog>
+        <mp-toptips msg="{{error_msg}}" type="error" show="{{ show_err }}"></mp-toptips>
+    </view>
+</view>

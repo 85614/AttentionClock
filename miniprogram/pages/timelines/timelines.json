@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "calendar": "plugin://calendar/calendar",
+    "mp-icon": "weui-miniprogram/icon/icon",
+    "mp-dialog": "weui-miniprogram/dialog/dialog",
+    "mp-cells": "weui-miniprogram/cells/cells",
+    "mp-cell": "weui-miniprogram/cell/cell",
+    "mp-slideview": "weui-miniprogram/slideview/slideview"
+  }
+}
